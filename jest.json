@@ -1,0 +1,17 @@
+{
+  "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+  },
+  "testPathIgnorePatterns": [
+    "<rootDir>/dist/",
+    "<rootDir>/dist-build/",
+    "<rootDir>/node_modules/",
+    "<rootDir>/tmp/",
+    "<rootDir>/.*\\.php$"
+  ],
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/react/tests/setup.js"
+  ],
+  "snapshotSerializers": ["enzyme-to-json/serializer"],
+  "testURL": "https://example.com/"
+}

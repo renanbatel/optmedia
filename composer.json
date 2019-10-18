@@ -1,0 +1,41 @@
+{
+    "name": "optmedia/optmedia",
+    "description": "Speed up your site by converting images and videos for light formats and using them with responsive resizing and lazy load.",
+    "version": "0.1.0",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "renanbatel",
+            "email": "renanbatel@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/renanbatel/optmedia/issues"
+    },
+    "config": {
+        "vendor-dir": "src/wordpress/vendor",
+        "bin-dir": "src/wordpress/vendor/bin",
+        "platform": {
+            "php": "7.2"
+        }
+    },
+    "scripts": {
+        "lint": [
+            "phpcs"
+        ],
+        "format": [
+            "phpcbf"
+        ]
+    },
+    "require": {
+        "spatie/image-optimizer": "^1.2",
+        "intervention/image": "^2.5",
+        "php-ffmpeg/php-ffmpeg": "^0.14.0"
+    },
+    "require-dev": {
+        "larapack/dd": "^1.1",
+        "squizlabs/php_codesniffer": "^3.4",
+        "phpunit/phpunit": "6.5.14"
+    }
+}

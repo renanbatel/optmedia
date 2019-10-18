@@ -1,0 +1,21 @@
+# Build
+dist
+dist-build
+
+# Javascript
+node_modules
+coverage
+package-lock.json
+yarn.lock
+
+# PHP
+src/wordpress/languages/*.json
+src/wordpress/languages/*.po
+src/wordpress/languages/*.mo
+src/wordpress/vendor
+composer.lock
+yarn.lock
+
+# Other
+.DS_STORE
+tmp

@@ -1,0 +1,38 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "airbnb"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "globals": {
+    "__OPTMEDIA__": true
+  },
+  "rules": {
+    "quotes": ["error", "double"],
+    "semi": ["error", "never"],
+    "padding-line-between-statements": ["error", 
+      { "blankLine": "always", "prev": ["const", "let"], "next": "*" },
+      { "blankLine": "any", "prev": ["const", "let"], "next": ["const", "let"] },
+      { "blankLine": "always", "prev": "return", "next": "*" }
+    ],
+    "no-console": ["error", {
+      "allow": ["warn", "error"]
+    }],
+    "padded-blocks": ["error", {
+      "classes": "always" 
+    }],
+    "no-underscore-dangle": ["error", {
+      "allow": [
+        "__OPTMEDIA__",
+        "_options"
+      ]
+    }],
+    "react/static-property-placement": ["error", "static public field"],
+    "import/no-extraneous-dependencies": "off"
+  }
+}

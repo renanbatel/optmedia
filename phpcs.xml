@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<ruleset name="OptMedia">
+  <description>OptMedia Coding Standards</description>
+
+  <!-- Scan all file in wordpress folder -->
+  <file>src/wordpress</file>
+
+  <!-- Scan only PHP files -->
+  <arg name="extensions" value="php" />
+
+  <!-- Skip composer dependencies -->
+  <exclude-pattern>src/wordpress/vendor/</exclude-pattern>
+  <exclude-pattern>scripts/</exclude-pattern>
+
+  <!-- Options -->
+  <arg value="-colors" />
+
+  <!-- Show sniff codes in all reports -->
+  <arg value="ns" />
+
+  <!-- Rules -->
+  <rule ref="Squiz.Arrays.ArrayDeclaration">
+    <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned" />
+    <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned" />
+    <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned" />
+    <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned" />
+    <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned" />
+    <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline" />
+    <exclude name="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed" />
+    <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+    <error code="NoComma" />
+  </rule>
+  <rule ref="Generic.Arrays.ArrayIndent">
+    <properties>
+      <property name="indent" value="4" />
+    </properties>
+  </rule>
+
+  <!-- Use PSR-2 as a standand -->
+  <rule ref="PSR2" />
+
+</ruleset>

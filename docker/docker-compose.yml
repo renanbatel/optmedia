@@ -1,0 +1,44 @@
+version: '3.5'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: optmedia_db_container
+    volumes:
+      - ../tmp/db/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    container_name: optmedia_phpmyadmin_container
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: wordpress
+
+  wordpress:
+    depends_on:
+      - db
+    build: .
+    image: optmedia_wordpress
+    container_name: optmedia_wordpress_container
+    ports:
+      - 8000:80
+    volumes:
+      - ../dist:/var/www/html/wp-content/plugins/optmedia
+      - ../tmp/uploads:/var/www/html/wp-content/uploads
+      - ../tmp/logs:/var/www/html/wp-content/logs
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_TEST_DATABASE: wordpress_test
+      MYSQL_ROOT_PASSWORD: wordpress

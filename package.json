@@ -1,0 +1,110 @@
+{
+  "name": "@optmedia/optmedia",
+  "description": "Speed up your site by converting images and videos for light formats and using them with responsive resizing and lazy load.",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renanbatel/optmedia"
+  },
+  "author": "Renan Batel <renanbatel@gmail.com> (https://github.com/renanbatel)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/renanbatel/optmedia/issues"
+  },
+  "scripts": {
+    "ttt": "npm i && composer install -o && npm run build:dev && npm run docker:serve",
+    "prebuild": "composer install -o --no-dev",
+    "postbuild": "composer install -o",
+    "pretest": "npm run build",
+    "precommit": "lint-staged",
+    "docker:serve": "docker-compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "docker:stop": "docker-compose -f docker/docker-compose.yml stop",
+    "build": "npm run prebuild && npm run build:prod && npm run postbuild",
+    "build:dev": "webpack --config webpack/webpack.dev.js",
+    "build:prod": "cross-env NODE_ENV=production BABEL_ENV=production webpack -p --config webpack/webpack.prod.js",
+    "build:analyse": "cross-env NODE_ENV=production BABEL_ENV=production webpack -p --config webpack/webpack.analyse.js",
+    "watch": "webpack --config webpack/webpack.dev.js --watch",
+    "lint:js": "eslint --ext .jsx --ext .js .",
+    "lint:scss": "stylelint ./src/**/*.scss",
+    "lint:php": "composer lint",
+    "format:js": "eslint --ext .jsx --ext .js --fix .",
+    "format:scss": "stylelint --fix ./src/**/*.scss",
+    "format:php": "composer format",
+    "test:js": "jest -c jest.json",
+    "test:js:watch": "jest -c jest.json --watch",
+    "test:js:coverage": "jest -c jest.json --coverage",
+    "test:php": "docker exec -u www-data optmedia_wordpress_container sh -c \"phpunit -c wp-content/plugins/optmedia/phpunit.xml\"",
+    "i18n:makepot": "php scripts/makepot/run.php src/wordpress/ src/wordpress/languages/optmedia.pot optmedia"
+  },
+  "lint-staged": {
+    "*.scss": [
+      "npm run format:scss",
+      "git add"
+    ],
+    "*.{js,jsx}": [
+      "npm run format:js",
+      "git add",
+      "npm run test:js"
+    ],
+    "*.php": [
+      "npm run format:php",
+      "git add",
+      "npm run test:php"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "7.6.2",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/preset-env": "7.6.2",
+    "@babel/preset-react": "7.0.0",
+    "babel-eslint": "10.0.3",
+    "babel-loader": "8.0.6",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.24",
+    "copy-webpack-plugin": "4.5.1",
+    "cpx": "1.5.0",
+    "cross-env": "5.1.6",
+    "css-loader": "0.28.11",
+    "enzyme": "3.10.0",
+    "enzyme-adapter-react-16": "1.15.0",
+    "enzyme-to-json": "3.4.2",
+    "error-overlay-webpack-plugin": "0.1.5",
+    "eslint": "6.5.1",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.15.1",
+    "extract-text-webpack-plugin": "4.0.0-beta.0",
+    "filemanager-webpack-plugin": "1.0.26",
+    "husky": "3.0.8",
+    "jest": "24.9.0",
+    "lint-staged": "9.4.2",
+    "node-sass": "4.9.0",
+    "redux-mock-store": "1.5.3",
+    "sass-loader": "7.0.1",
+    "stylelint": "11.0.0",
+    "stylelint-config-sass-guidelines": "6.1.0",
+    "stylelint-selector-bem-pattern": "2.1.0",
+    "webpack": "4.9.1",
+    "webpack-cli": "2.1.4",
+    "webpack-jarvis": "0.3.2",
+    "webpack-merge": "4.1.2"
+  },
+  "dependencies": {
+    "core-js": "3.2.1",
+    "debug": "4.1.1",
+    "i18next": "17.1.0",
+    "prop-types": "15.7.2",
+    "react": "16.10.2",
+    "react-dom": "16.10.2",
+    "react-i18next": "10.13.1",
+    "react-redux": "7.1.1",
+    "redux": "4.0.4",
+    "redux-devtools-extension": "2.13.8",
+    "redux-saga": "1.1.1",
+    "regenerator-runtime": "0.13.3",
+    "semantic-ui-react": "0.88.1",
+    "superagent": "5.1.0",
+    "wpapi": "1.2.1"
+  }
+}
