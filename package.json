@@ -12,7 +12,6 @@
     "url": "https://github.com/renanbatel/optmedia/issues"
   },
   "scripts": {
-    "ttt": "npm i && composer install -o && npm run build:dev && npm run docker:serve",
     "prebuild": "composer install -o --no-dev",
     "postbuild": "composer install -o",
     "pretest": "npm run build",
