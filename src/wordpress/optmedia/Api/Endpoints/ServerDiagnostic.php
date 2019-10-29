@@ -5,9 +5,9 @@ namespace OptMedia\Api\Endpoints;
 use WP_REST_Server;
 
 use OptMedia\Api\Resources\Endpoint;
-use OptMedia\Settings\Option;
+use OptMedia\Utils\ServerDiagnostic as ServerDiagnosticUtil;
 
-class Options extends Endpoint
+class ServerDiagnostic extends Endpoint
 {
     /**
      * Handles endpoint GET method
@@ -20,18 +20,9 @@ class Options extends Endpoint
      */
     public function get($request)
     {
-        $option = new Option();
-
         return $this->response([
             "success" => true,
-            "data" => [
-                "asset_path"      => plugin_dir_url(OPTMEDIA_PLUGIN_FILE) . "static",
-                "language"        => get_bloginfo("language"),
-                "name"            => OPTMEDIA_NAME,
-                "options"         => $option->getOptions(),
-                "translationSlug" => OPTMEDIA_DOMAIN,
-                "version"         => OPTMEDIA_VERSION,
-            ],
+            "data" => ServerDiagnosticUtil::checkPluginRequirements(),
         ]);
     }
 
@@ -46,7 +37,7 @@ class Options extends Endpoint
     public function load()
     {
         $this->registerRoute(
-            "/options",
+            "/serverDiagnostic",
             WP_REST_Server::READABLE,
             "defaultPermission"
         );

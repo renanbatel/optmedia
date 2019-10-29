@@ -22,13 +22,16 @@ abstract class Endpoint
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    protected function registerRoute($route, $methods, $permission)
+    protected function registerRoute($route, $methods, $permission = "")
     {
         $args = [
             "callback" => [$this, "router"],
             "methods" => $methods,
-            "permission_callback" => [$this, $permission],
         ];
+
+        if ($permission) {
+            $args["permission_callback"] = [$this, $permission];
+        }
 
         register_rest_route(
             OPTMEDIA_API_NAMESPACE,
