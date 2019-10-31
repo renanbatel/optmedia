@@ -5,6 +5,11 @@ export const appUpdateLoading = (loading) => ({
   loading,
 })
 
+export const appUpdateError = (error) => ({
+  type: APP.UPDATE_ERROR,
+  error,
+})
+
 export const appOptionsRequest = () => ({
   type: APP.OPTIONS_REQUEST,
 })

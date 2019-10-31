@@ -1,5 +1,6 @@
 import {
   appUpdateLoading,
+  appUpdateError,
   appOptionsRequest,
   appOptionsSuccess,
 } from "../app"
@@ -14,7 +15,18 @@ describe("actions/app", () => {
 
     expect(appUpdateLoading(false)).toEqual(action)
   })
+  it("should return the update error action", () => {
+    const error = {
+      message: "Request Error",
+      instance: new Error(),
+    }
+    const action = {
+      type: APP.UPDATE_ERROR,
+      error,
+    }
 
+    expect(appUpdateError(error)).toEqual(action)
+  })
   it("should return the options request action", () => {
     const action = {
       type: APP.OPTIONS_REQUEST,

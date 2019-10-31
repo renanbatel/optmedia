@@ -1,26 +1,43 @@
-import { runSaga } from "redux-saga"
-
+import { ERROR } from "../../constants"
+import { runSagaFunction } from "../../tests/utils/saga"
 import wp from "../../services/wp"
-import { handleAppOptionsRequest } from "../app"
-import { appOptionsSuccess } from "../../actions/app"
-import { initialState } from "../../store"
+import watchApp, { handleAppOptionsRequest } from "../app"
+import { appOptionsSuccess, appUpdateError, appUpdateLoading } from "../../actions/app"
 
 describe("saga/app", () => {
-  it("should handle app options request and handle then in case of success", async () => {
+  let pluginOptions
+
+  beforeAll(() => {
+    pluginOptions = wp.pluginOptions
+  })
+  afterEach(() => {
+    wp.pluginOptions = pluginOptions
+  })
+  it("should watch app actions", () => {
+    const app = watchApp()
+
+    expect(app.next().value).toBeDefined()
+  })
+  it("should handle app options request and handle response in case of success", async () => {
     const options = {
       a: 1,
     }
-    const dispatchedActions = []
-    const fakeStore = {
-      getState: () => initialState,
-      dispatch: (action) => dispatchedActions.push(action),
-    }
 
-    wp.pluginOptions = jest.fn(() => Promise.resolve({ data: options }))
+    wp.pluginOptions = jest.fn(() => Promise.resolve({ options }))
 
-    await runSaga(fakeStore, handleAppOptionsRequest).toPromise()
+    const dispatchedActions = await runSagaFunction(handleAppOptionsRequest)
 
     expect(wp.pluginOptions.mock.calls.length).toBe(1)
     expect(dispatchedActions).toContainEqual(appOptionsSuccess(options))
+    expect(dispatchedActions).toContainEqual(appUpdateLoading(false))
+  })
+  it("should handle app options request errors", async () => {
+    const error = {
+      code: ERROR.PLUGIN_API_REQUEST,
+      instance: expect.anything(),
+    }
+    const dispatchedActions = await runSagaFunction(handleAppOptionsRequest)
+
+    expect(dispatchedActions).toContainEqual(appUpdateError(error))
   })
 })
