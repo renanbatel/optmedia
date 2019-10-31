@@ -12,6 +12,8 @@ class Admin
 {
     protected $options;
 
+    public $pluginScreenHookSuffix;
+
     public function __construct()
     {
         $this->options = (array) json_decode(get_option(OPTMEDIA_OPTIONS_NAME));
@@ -40,7 +42,8 @@ class Admin
      */
     public function addMenuPage()
     {
-        $this->pluginScreenHookSuffix = add_menu_page(
+        $this->pluginScreenHookSuffix = add_submenu_page(
+            "upload.php",
             __("OptMedia Settings", OPTMEDIA_DOMAIN),
             __("OptMedia", OPTMEDIA_DOMAIN),
             $this->options["settings_userAccessLevel"],
@@ -49,8 +52,6 @@ class Admin
                 $this,
                 "displaySettingsPage",
             ]
-            // TODO: setup icon
-            // plugin_dir_url( __FILE__ ) . "assets/logo-menu.png"
         );
     }
 
@@ -116,12 +117,15 @@ class Admin
                 OPTMEDIA_NAME,
                 "__OPTMEDIA__",
                 [
+                    "basename" => admin_url("upload.php?page=" . OPTMEDIA_ADMIN_PAGE_SLUG),
                     "asset_path" => plugin_dir_url(OPTMEDIA_PLUGIN_FILE) . "static",
-                    "language"   => get_bloginfo("language"),
-                    "endpoint"   => esc_url_raw(rest_url()),
-                    "namespace"  => OPTMEDIA_API_NAMESPACE,
-                    "nonce"      => wp_create_nonce("wp_rest"),
-                    "root"       => esc_url_raw(rest_url()),
+                    "language" => get_bloginfo("language"),
+                    "endpoint" => esc_url_raw(rest_url()),
+                    "namespace" => OPTMEDIA_API_NAMESPACE,
+                    "nonce" => wp_create_nonce("wp_rest"),
+                    "root" => esc_url_raw(rest_url()),
+                    "name" => OPTMEDIA_NAME,
+                    "translationSlug" => OPTMEDIA_DOMAIN,
                 ]
             );
         }

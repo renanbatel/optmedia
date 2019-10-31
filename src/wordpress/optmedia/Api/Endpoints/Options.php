@@ -24,14 +24,7 @@ class Options extends Endpoint
 
         return $this->response([
             "success" => true,
-            "data" => [
-                "asset_path"      => plugin_dir_url(OPTMEDIA_PLUGIN_FILE) . "static",
-                "language"        => get_bloginfo("language"),
-                "name"            => OPTMEDIA_NAME,
-                "options"         => $option->getOptions(),
-                "translationSlug" => OPTMEDIA_DOMAIN,
-                "version"         => OPTMEDIA_VERSION,
-            ],
+            "options" => $option->getOptions(),
         ]);
     }
 
