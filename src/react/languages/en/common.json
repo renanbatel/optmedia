@@ -2,5 +2,14 @@
   "app": {
     "name": "OptMedia",
     "description": "Speed up your site by converting images and videos for light formats and using them with responsive resizing and lazy load."
+  },
+  "title": {
+    "set_up": "Hello! Let's optimize your site."
+  },
+  "subtitle": {
+    "set_up": "With this plugin, you'll be able to optimize your site images using lossy compression, responsive resizing, lazy load and format conversion."
+  },
+  "button": {
+    "begin": "Begin"
   }
 }

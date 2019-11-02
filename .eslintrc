@@ -33,6 +33,8 @@
       ]
     }],
     "react/static-property-placement": ["error", "static public field"],
-    "import/no-extraneous-dependencies": "off"
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/no-extraneous-dependencies": "off",
+    "react/forbid-foreign-prop-types": "off"
   }
 }
