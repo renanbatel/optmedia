@@ -19,9 +19,7 @@ class SetUpUpdateTest extends WP_UnitTestCase
         $this->optionMock = $this->getMockBuilder(Option::class)
             ->setMethods(["updateOption"])
             ->getMock();
-        $this->setUpUpdate = new SetUpUpdate();
-
-        $this->setUpUpdate->setOption($this->optionMock);
+        $this->setUpUpdate = SetUpUpdate::factory($this->optionMock);
     }
 
     /**

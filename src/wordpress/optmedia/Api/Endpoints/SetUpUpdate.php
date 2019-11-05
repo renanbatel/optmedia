@@ -27,6 +27,24 @@ class SetUpUpdate extends Endpoint
     }
 
     /**
+     * Creates the SetUpUpdate Object with given dependencies
+     *
+     * @param Option $option
+     * @return SetUpUpdate
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     */
+    public static function factory(Option $option): SetUpUpdate
+    {
+        $setUpUpdate = new SetUpUpdate();
+
+        $setUpUpdate->setOption($option);
+
+        return $setUpUpdate;
+    }
+
+    /**
      * Sets the option object
      *
      * @param Option $option The option object

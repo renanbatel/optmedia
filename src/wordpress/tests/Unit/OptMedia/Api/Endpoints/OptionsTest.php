@@ -17,9 +17,7 @@ class OptionsTest extends WP_UnitTestCase
         $this->optionMock = $this->getMockBuilder(Option::class)
             ->setMethods(["getOptions"])
             ->getMock();
-        $this->options = new Options();
-
-        $this->options->setOption($this->optionMock);
+        $this->options = Options::factory($this->optionMock);
     }
 
     /**

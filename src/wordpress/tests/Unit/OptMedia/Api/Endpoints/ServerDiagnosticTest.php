@@ -16,9 +16,7 @@ class ServerDiagnosticTest extends WP_UnitTestCase
         $this->serverDiagnosticUtilMock = $this->getMockBuilder("\OptMedia\Utils\ServerDiagnostic")
             ->setMethods(["checkPluginRequirements"])
             ->getMock();
-        $this->serverDiagnostic = new ServerDiagnostic();
-
-        $this->serverDiagnostic->setServerDiagnostic($this->serverDiagnosticUtilMock);
+        $this->serverDiagnostic = ServerDiagnostic::factory($this->serverDiagnosticUtilMock);
     }
 
     /**

@@ -24,6 +24,24 @@ class Options extends Endpoint
     }
 
     /**
+     * Creates the Options object with given dependencies
+     *
+     * @param Option $option
+     * @return Options
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     */
+    public static function factory(Option $option): Options
+    {
+        $options = new Options();
+
+        $options->setOption($option);
+
+        return $options;
+    }
+
+    /**
      * Sets the class option object
      *
      * @param Option $option The option object

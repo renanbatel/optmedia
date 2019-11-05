@@ -13,10 +13,31 @@ class ServerDiagnostic extends Endpoint
 
     /**
      * Class Constructor
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
     public function __construct()
     {
         $this->serverDiagnostic = new \OptMedia\Utils\ServerDiagnostic();
+    }
+
+    /**
+     * Creates the ServerDiagnostic object with given dependencies
+     *
+     * @param \OptMedia\Utils\ServerDiagnostic $serverDiagnosticUtil
+     * @return ServerDiagnostic
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     */
+    public static function factory(\OptMedia\Utils\ServerDiagnostic $serverDiagnosticUtil): ServerDiagnostic
+    {
+        $serverDiagnostic = new ServerDiagnostic();
+
+        $serverDiagnostic->setServerDiagnostic($serverDiagnosticUtil);
+
+        return $serverDiagnostic;
     }
 
     /**
