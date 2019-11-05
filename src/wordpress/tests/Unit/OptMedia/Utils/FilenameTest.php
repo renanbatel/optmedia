@@ -11,7 +11,7 @@ class FilenameTest extends WP_UnitTestCase
 
     /**
      * @test
-     * @group utils
+     * @group unit-utils
      */
     public function canSwapExtension(): void
     {
@@ -24,7 +24,7 @@ class FilenameTest extends WP_UnitTestCase
 
     /**
      * @test
-     * @group utils
+     * @group unit-utils
      */
     public function canAddSizes(): void
     {

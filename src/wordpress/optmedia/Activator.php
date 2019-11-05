@@ -8,6 +8,7 @@
 
 namespace OptMedia;
 
+use OptMedia\Constants;
 use OptMedia\Settings\Option;
 
 class Activator
@@ -31,10 +32,10 @@ class Activator
         // the prefix indicates the usage of this setting (eg. plugin_ is for app-wide
         // settings, settings_ only for the admin-settings pages)
         self::$defaultOptions = [
-            "plugin_currentVersion" => OPTMEDIA_VERSION,
-            "plugin_lastVersion" => OPTMEDIA_VERSION,
-            "plugin_isSetUp" => false,
-            "settings_userAccessLevel" => "manage_options",
+            Constants::PLUGIN_CURRENT_VERSION => OPTMEDIA_VERSION,
+            Constants::PLUGIN_LAST_VERSION => OPTMEDIA_VERSION,
+            Constants::PLUGIN_IS_SETUP => false,
+            Constants::SETTINGS_USER_ACCESS_LEVEL => "manage_options",
         ];
 
         // get current options

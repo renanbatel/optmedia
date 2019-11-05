@@ -7,6 +7,8 @@
 
 namespace OptMedia;
 
+use OptMedia\Constants;
+
 class Deactivator
 {
     /**
@@ -22,7 +24,7 @@ class Deactivator
         // do something here, but consider using uninstall.php if user removes plugin
         // eg. update the last installed plugin version
         $options = (array) json_decode(get_option(OPTMEDIA_OPTIONS_NAME));
-        $options["plugin_LastVersion"] = OPTMEDIA_VERSION;
+        $options[Constants::PLUGIN_LAST_VERSION] = OPTMEDIA_VERSION;
 
         update_option(OPTMEDIA_OPTIONS_NAME, json_encode($options));
     }

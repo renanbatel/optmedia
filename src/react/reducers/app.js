@@ -32,6 +32,17 @@ export default (state = initialState, action) => {
         options,
       }
     }
+    case APP.SET_UP_UPDATE_SUCCESS: {
+      const { plugin_isSetUp } = action
+
+      return {
+        ...state,
+        options: {
+          ...state.options,
+          plugin_isSetUp,
+        },
+      }
+    }
     default:
       return state
   }

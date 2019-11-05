@@ -41,8 +41,8 @@ module.exports = webpackMerge(baseConfig, {
             destination: path.resolve(__dirname, "../dist"),
           },
           {
-            source: path.resolve(__dirname, "../src/wordpress/tests/resources/*"),
-            destination: path.resolve(__dirname, "../dist/tests/resources"),
+            source: path.resolve(__dirname, "../src/wordpress/tests/Resources/Static/**/*"),
+            destination: path.resolve(__dirname, "../dist/tests/Resources/Static"),
           },
         ],
       },

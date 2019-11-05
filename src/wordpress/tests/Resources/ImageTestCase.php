@@ -1,6 +1,6 @@
 <?php
 
-namespace OptMedia\Tests\Unit\OptMedia\Providers\Server\Resources;
+namespace OptMedia\Tests\Resources;
 
 use WP_UnitTestCase;
 
@@ -16,7 +16,7 @@ abstract class ImageTestCase extends WP_UnitTestCase
 
     public function setUp(): void
     {
-        $this->basedir = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/resources";
+        $this->basedir = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img";
         $this->tmpDir = "{$this->basedir}/.tmp";
         $this->webpFile = "{$this->basedir}/waterski.webp";
         $this->jpgFile = "{$this->basedir}/tiger.jpg";

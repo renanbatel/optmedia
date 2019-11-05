@@ -32,7 +32,8 @@
     "test:js": "jest -c jest.json --verbose",
     "test:js:watch": "jest -c jest.json --watch",
     "test:js:coverage": "jest -c jest.json --coverage",
-    "test:php": "docker exec -u www-data optmedia_wordpress_container sh -c \"phpunit -c wp-content/plugins/optmedia/phpunit.xml\"",
+    "test:php": "docker exec -u www-data optmedia_wordpress_container phpunit -c wp-content/plugins/optmedia/phpunit.xml",
+    "test:php:all": "docker exec -u www-data optmedia_wordpress_container sh -c \"phpunit -c wp-content/plugins/optmedia/phpunit.xml\"",
     "i18n:makepot": "php scripts/makepot/run.php src/wordpress/ src/wordpress/languages/optmedia.pot optmedia"
   },
   "lint-staged": {
@@ -48,7 +49,7 @@
     "*.php": [
       "npm run format:php",
       "git add",
-      "npm run test:php"
+      "npm run test:php:all"
     ]
   },
   "devDependencies": {
@@ -83,6 +84,7 @@
     "node-sass": "4.9.0",
     "redux-mock-store": "1.5.3",
     "sass-loader": "7.0.1",
+    "shallow-equal": "1.2.0",
     "stylelint": "11.0.0",
     "stylelint-config-sass-guidelines": "6.1.0",
     "stylelint-selector-bem-pattern": "2.1.0",
@@ -98,6 +100,7 @@
     "@fortawesome/free-solid-svg-icons": "5.11.2",
     "@fortawesome/react-fontawesome": "0.1.7",
     "antd": "3.24.3",
+    "classnames": "2.2.6",
     "core-js": "3.2.1",
     "debug": "4.1.1",
     "i18next": "17.1.0",

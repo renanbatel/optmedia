@@ -4,12 +4,19 @@
     "description": "Speed up your site by converting images and videos for light formats and using them with responsive resizing and lazy load."
   },
   "title": {
-    "set_up": "Hello! Let's optimize your site."
+    "set_up": "Hello! Let's optimize your site.",
+    "server_diagnostic": "We're checking if your host has everything that we need."
   },
   "subtitle": {
-    "set_up": "With this plugin, you'll be able to optimize your site images using lossy compression, responsive resizing, lazy load and format conversion."
+    "set_up": "With this plugin, you'll be able to optimize your site images using lossy compression, responsive resizing, lazy load and format conversion.",
+    "server_diagnostic": "This plugin needs everything listed bellow, so it can work correctly."
+  },
+  "caption": {
+    "server_diagnostic_equivalent": "You don't have {{target}} but {{equivalent}} is equivalent."
   },
   "button": {
-    "begin": "Begin"
+    "begin": "Begin",
+    "back": "Back",
+    "finish": "Finish"
   }
 }

@@ -3,6 +3,7 @@ import {
   appUpdateLoading,
   appUpdateError,
   appOptionsSuccess,
+  appSetUpUpdateSuccess,
 } from "../../actions/app"
 
 describe("reducers/app", () => {
@@ -31,5 +32,11 @@ describe("reducers/app", () => {
     const state = app(undefined, appOptionsSuccess(options))
 
     expect(state.options).toEqual(options)
+  })
+  it("should update the is set up state", () => {
+    const plugin_isSetUp = true
+    const state = app(undefined, appSetUpUpdateSuccess(plugin_isSetUp))
+
+    expect(state.options.plugin_isSetUp).toBe(plugin_isSetUp)
   })
 })

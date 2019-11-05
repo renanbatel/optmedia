@@ -36,7 +36,7 @@ class Option
     {
         $options = $this->getOptions();
 
-        return isset($options[$key])  ? $options[$key] : null;
+        return isset($options[$key]) ? $options[$key] : null;
     }
 
     /**
@@ -52,6 +52,11 @@ class Option
     public function updateOption($key, $value)
     {
         $options = $this->getOptions();
+        
+        if ($options[$key] === $value) {
+            return true;
+        }
+
         $options[$key] = $value;
 
         return update_option(OPTMEDIA_OPTIONS_NAME, json_encode($options));

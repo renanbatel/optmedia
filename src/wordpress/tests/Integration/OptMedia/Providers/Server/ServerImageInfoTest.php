@@ -1,6 +1,6 @@
 <?php
 
-namespace OptMedia\Tests\Unit\OptMedia\Providers\Server;
+namespace OptMedia\Tests\Integration\OptMedia\Providers\Server;
 
 use WP_UnitTestCase;
 
@@ -17,9 +17,9 @@ class ServerImageInfoTest extends WP_UnitTestCase
 
     public function setUp(): void
     {
-        $this->webpFile = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/resources/waterski.webp";
-        $this->jpgFile = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/resources/tiger.jpg";
-        $this->pngFile = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/resources/bitcoin.png";
+        $this->webpFile = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img/waterski.webp";
+        $this->jpgFile = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img/tiger.jpg";
+        $this->pngFile = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img/bitcoin.png";
         $this->webpImageInfo = new ServerImageInfo($this->webpFile);
         $this->jpgImageInfo = new ServerImageInfo($this->jpgFile);
         $this->pngImageInfo = new ServerImageInfo($this->pngFile);
@@ -27,7 +27,7 @@ class ServerImageInfoTest extends WP_UnitTestCase
     
     /**
      * @test
-     * @group server-image-info
+     * @group int-server-image-info
      */
     public function canGetSizes(): void
     {
@@ -51,7 +51,7 @@ class ServerImageInfoTest extends WP_UnitTestCase
 
     /**
      * @test
-     * @group server-image-info
+     * @group int-server-image-info
      */
     public function canFileSizeInBytes(): void
     {

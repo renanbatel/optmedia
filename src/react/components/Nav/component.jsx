@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 
-import View from "./View"
+import View from "./view"
 
 class Nav extends Component {
 
@@ -11,11 +11,24 @@ class Nav extends Component {
   }
 
   componentDidMount() {
-    const { history, isSetUp } = this.props
+    this.handleRedirection()
+  }
 
-    if (!isSetUp && history.location.pathname !== "/setup") {
+  componentDidUpdate(prevProps) {
+    const { isSetUp } = this.props
+
+    if (isSetUp !== prevProps.isSetUp) {
+      this.handleRedirection()
+    }
+  }
+
+  handleRedirection() {
+    const { history, isSetUp } = this.props
+    const isSetUpPath = /^\/setup\/?/.test(history.location.pathname)
+
+    if (!isSetUp && !isSetUpPath) {
       history.push("/setup")
-    } else if (isSetUp && history.location.pathname === "/setup") {
+    } else if (isSetUp && isSetUpPath) {
       history.push("/")
     }
   }

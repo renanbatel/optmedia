@@ -1,6 +1,6 @@
 <?php
 
-namespace OptMedia\Tests\Unit\OptMedia\Utils;
+namespace OptMedia\Tests\Integration\OptMedia\Utils;
 
 use WP_UnitTestCase;
 
@@ -19,7 +19,7 @@ class MediaSettingsTest extends WP_UnitTestCase
 
     /**
      * @test
-     * @group utils
+     * @group int-utils
      */
     public function getSizesReturnsArray(): void
     {
@@ -28,7 +28,7 @@ class MediaSettingsTest extends WP_UnitTestCase
 
     /**
      * @test
-     * @group utils
+     * @group int-utils
      */
     public function getSizesReturnsDefaultSizes(): void
     {

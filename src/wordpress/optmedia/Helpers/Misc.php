@@ -19,7 +19,7 @@ class Misc
      * @since 0.1.0
      * @author Renan Batel <renanbatel@gmail.com>
      */
-    public static function commandExists($command)
+    public function commandExists($command)
     {
         $windows = strpos(PHP_OS, "WIN") === 0;
         $test = $windows ? "where" : "command -v";

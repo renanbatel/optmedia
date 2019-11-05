@@ -1,12 +1,12 @@
 import { runSaga } from "redux-saga"
 
-export const runSagaFunction = async (saga) => {
+export const runSagaFunction = async (saga, ...args) => {
   const dispatchedActions = []
   const fakeStore = {
     dispatch: (action) => dispatchedActions.push(action),
   }
 
-  await runSaga(fakeStore, saga).toPromise()
+  await runSaga(fakeStore, saga, ...args).toPromise()
 
   return dispatchedActions
 }

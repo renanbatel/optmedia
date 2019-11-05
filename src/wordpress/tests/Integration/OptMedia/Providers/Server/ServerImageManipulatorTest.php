@@ -1,8 +1,8 @@
 <?php
 
-namespace OptMedia\Tests\Unit\OptMedia\Providers\Server;
+namespace OptMedia\Tests\Integration\OptMedia\Providers\Server;
 
-use OptMedia\Tests\Unit\OptMedia\Providers\Server\Resources\ImageTestCase;
+use OptMedia\Tests\Resources\ImageTestCase;
 use OptMedia\Providers\Server\ServerImageManipulator;
 
 class ServerImageManipulatorTest extends ImageTestCase
@@ -22,7 +22,7 @@ class ServerImageManipulatorTest extends ImageTestCase
 
     /**
      * @test
-     * @group server-image-manipulator
+     * @group int-server-image-manipulator
      */
     public function canConvert(): void
     {
@@ -67,7 +67,7 @@ class ServerImageManipulatorTest extends ImageTestCase
 
     /**
      * @test
-     * @group server-image-manipulator
+     * @group int-server-image-manipulator
      */
     public function canResize(): void
     {

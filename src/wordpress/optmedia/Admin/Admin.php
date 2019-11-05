@@ -8,6 +8,8 @@
 
 namespace OptMedia\Admin;
 
+use OptMedia\Constants;
+
 class Admin
 {
     protected $options;
@@ -46,7 +48,7 @@ class Admin
             "upload.php",
             __("OptMedia Settings", OPTMEDIA_DOMAIN),
             __("OptMedia", OPTMEDIA_DOMAIN),
-            $this->options["settings_userAccessLevel"],
+            $this->options[Constants::SETTINGS_USER_ACCESS_LEVEL],
             OPTMEDIA_ADMIN_PAGE_SLUG,
             [
                 $this,

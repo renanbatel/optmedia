@@ -34,5 +34,6 @@ define("OPTMEDIA_PLUGIN_FILE", __FILE__);
 
 \OptMedia\Startup::init();
 
+// TODO: use dependency injection
 // TODO: save user log for debugging
 // TODO: send e-mail to admin with server configuration instructions

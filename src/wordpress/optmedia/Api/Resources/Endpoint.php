@@ -2,9 +2,11 @@
 
 namespace OptMedia\Api\Resources;
 
+use ReflectionMethod;
 use WP_Error;
 use WP_REST_Response;
 
+use OptMedia\Constants;
 use OptMedia\Settings\Option;
 
 abstract class Endpoint
@@ -33,7 +35,7 @@ abstract class Endpoint
             $args["permission_callback"] = [$this, $permission];
         }
 
-        register_rest_route(
+        \register_rest_route(
             OPTMEDIA_API_NAMESPACE,
             $route,
             $args
@@ -51,7 +53,7 @@ abstract class Endpoint
     public function defaultPermission()
     {
         $option = new Option();
-        $permissions = $option->getOption("settings_userAccessLevel");
+        $permissions = $option->getOption(Constants::SETTINGS_USER_ACCESS_LEVEL);
 
         if (!current_user_can($permissions)) {
             return new WP_Error(
@@ -73,8 +75,13 @@ abstract class Endpoint
     public function router($request)
     {
         $method = strtolower($request->get_method());
+        $reflection = new ReflectionMethod($this, $method);
 
-        return $this->{$method}($request);
+        if ($reflection->getNumberOfParameters() === 1) {
+            return $this->{$method}($request);
+        } else {
+            return $this->{$method}();
+        }
     }
 
     /**

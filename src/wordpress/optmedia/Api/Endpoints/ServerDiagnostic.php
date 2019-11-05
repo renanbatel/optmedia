@@ -3,27 +3,53 @@
 namespace OptMedia\Api\Endpoints;
 
 use WP_REST_Server;
+use WP_REST_Response;
 
 use OptMedia\Api\Resources\Endpoint;
-use OptMedia\Utils\ServerDiagnostic as ServerDiagnosticUtil;
 
 class ServerDiagnostic extends Endpoint
 {
+    protected $serverDiagnostic;
+
+    /**
+     * Class Constructor
+     */
+    public function __construct()
+    {
+        $this->serverDiagnostic = new \OptMedia\Utils\ServerDiagnostic();
+    }
+
+    /**
+     * Sets the ServerDiagnostic Utility object
+     *
+     * @param \OptMedia\Utils\ServerDiagnostic $serverDiagnostic
+     * @return void
+     */
+    public function setServerDiagnostic(\OptMedia\Utils\ServerDiagnostic $serverDiagnostic): void
+    {
+        $this->serverDiagnostic = $serverDiagnostic;
+    }
+
     /**
      * Handles endpoint GET method
      *
-     * @param WP_REST_Request $request
-     * @return void
+     * @return WP_REST_Response The response
      *
      * @since 0.1.1
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    public function get($request)
+    public function get(): WP_REST_Response
     {
-        return $this->response([
-            "success" => true,
-            "data" => ServerDiagnosticUtil::checkPluginRequirements(),
-        ]);
+        $diagnostic = $this->serverDiagnostic->checkPluginRequirements();
+
+        if (!empty($diagnostic)) {
+            return $this->response([
+                "success" => true,
+                "diagnostic" => $diagnostic,
+            ]);
+        }
+
+        return $this->internalError();
     }
 
     /**
@@ -38,8 +64,8 @@ class ServerDiagnostic extends Endpoint
     {
         $this->registerRoute(
             "/serverDiagnostic",
-            WP_REST_Server::READABLE,
-            "defaultPermission"
+            WP_REST_Server::READABLE
+            // "defaultPermission"
         );
     }
 }

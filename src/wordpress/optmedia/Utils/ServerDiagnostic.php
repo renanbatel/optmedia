@@ -13,7 +13,33 @@ use OptMedia\Helpers;
 
 class ServerDiagnostic
 {
-    
+    protected $helperMisc;
+
+    /**
+     * Class constructor
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     */
+    public function __construct()
+    {
+        $this->helperMisc = new Helpers\Misc();
+    }
+
+    /**
+     * Sets the Misc Helper object
+     *
+     * @param Helpers\Misc $helperMisc
+     * @return void
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     */
+    public function setHelperMisc(Helpers\Misc $helperMisc):void
+    {
+        $this->helperMisc = $helperMisc;
+    }
+
     /**
      * Check if server has support for an specific requirement
      *
@@ -23,7 +49,7 @@ class ServerDiagnostic
      * @since 0.1.0
      * @author Renan Batel <renanbatel@gmail.com>
      */
-    public static function checkRequirement($requirement)
+    public function checkRequirement($requirement)
     {
         $result = [
             "name" => $requirement[ "name" ],
@@ -37,7 +63,7 @@ class ServerDiagnostic
         if ($requirement[ "type" ] === "extension") {
             $result[ "passed" ] = extension_loaded($requirement[ "name" ]);
         } else if ($requirement[ "type" ] === "command") {
-            $result[ "passed" ] = Helpers\Misc::commandExists($requirement[ "name" ]);
+            $result[ "passed" ] = $this->helperMisc->commandExists($requirement[ "name" ]);
         }
 
         // If extension didn't load, return it
@@ -69,9 +95,9 @@ class ServerDiagnostic
      * @since 0.1.0
      * @author Renan Batel <renanbatel@gmail.com>
      */
-    public static function checkRequirements($requirements)
+    public function checkRequirements($requirements)
     {
-        $diagnostic = array_map([ new self, "checkRequirement" ], $requirements);
+        $diagnostic = array_map([ $this, "checkRequirement" ], $requirements);
         $results = array_reduce($diagnostic, function ($carry, $current) {
             $name = $current["name"];
             $carry[$name] = $current;
@@ -92,13 +118,13 @@ class ServerDiagnostic
      * @since 0.1.0
      * @author Renan Batel <renanbatel@gmail.com>
      */
-    public static function checkPluginRequirements()
+    public function checkPluginRequirements()
     {
         $requirements = [
             [
                 "name"    => "php",
                 "type"    => "php",
-                "version" => "7.0",
+                "version" => "7.2",
             ],
             [
                 "name" => "fileinfo",
@@ -138,6 +164,6 @@ class ServerDiagnostic
             ],
         ];
 
-        return self::checkRequirements($requirements);
+        return $this->checkRequirements($requirements);
     }
 }
