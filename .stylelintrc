@@ -1,13 +1,12 @@
 {
-  "extends": "stylelint-config-sass-guidelines",
   "plugins": [
-    "stylelint-selector-bem-pattern"
+    "@namics/stylelint-bem"
   ],
   "rules": {
-    "max-nesting-depth": 2,
-    "scss/at-import-partial-extension-blacklist": null,
-    "plugin/selector-bem-pattern": {
-      "preset": "bem"
+    "plugin/stylelint-bem-namics": {
+      "namespaces": ["om-"],
+      "patternPrefixes": [],
+      "helperPrefixes": []
     }
   }
 }
