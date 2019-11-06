@@ -9,8 +9,8 @@ su -s /bin/bash www-data -c "
     wp core install \
         --url='http://localhost:8000' \
         --title='OptMedia - Dev' \
-        --admin_user=admin \
-        --admin_password=passwd \
+        --admin_user=wordpress \
+        --admin_password=wordpress \
         --admin_email=admin@optmedia.dev \
         --skip-email
     wp plugin activate optmedia

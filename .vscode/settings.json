@@ -7,5 +7,19 @@
   },
   "[scss]": {
     "editor.tabSize": 2
-  }
+  },
+  "intelephense.files.exclude": [
+    "**/.git/**",
+    "**/.svn/**",
+    "**/.hg/**",
+    "**/CVS/**",
+    "**/.DS_Store/**",
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**/{Test,test,Tests,tests}/**",
+    "dist/**",
+    "dist-build/**",
+    "tmp/**",
+    "scripts/**"
+  ]
 }
