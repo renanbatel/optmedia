@@ -14,8 +14,7 @@
   "scripts": {
     "prebuild": "composer install -o --no-dev",
     "postbuild": "composer install -o",
-    "pretest": "npm run build",
-    "docker:serve": "docker-compose -f docker/docker-compose.yml up -d",
+    "docker:up": "docker-compose -f docker/docker-compose.yml up -d",
     "docker:down": "docker-compose -f docker/docker-compose.yml down",
     "docker:stop": "docker-compose -f docker/docker-compose.yml stop",
     "build": "npm run prebuild && npm run build:prod && npm run postbuild",
