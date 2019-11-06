@@ -8,12 +8,14 @@
 
 namespace OptMedia;
 
+use OptMedia\Constants;
 use OptMedia\I18N;
 use OptMedia\Settings\Settings;
 use OptMedia\Admin\Admin;
 use OptMedia\Api\Api;
 use OptMedia\Handlers\Upload as UploadHandler;
 use OptMedia\Theme\Theme;
+use OptMedia\Settings\Option;
 
 class OptMedia
 {
@@ -96,11 +98,16 @@ class OptMedia
      */
     private function loadHandlers()
     {
-        $uploadHandler = new UploadHandler();
+        $option = new Option();
 
-        add_filter("wp_handle_upload", [$uploadHandler, "handleUpload"], 10, 2);
-        add_filter("file_is_displayable_image", [$uploadHandler, "handleDisplayableImage"], 10, 2);
-        add_filter("wp_generate_attachment_metadata", [$uploadHandler, "handleMetadataGeneration"], 10, 2);
+        // Only load media handlers if plugin is set up
+        if ($option->getOption(Constants::PLUGIN_IS_SETUP)) {
+            $uploadHandler = new UploadHandler();
+
+            add_filter("wp_handle_upload", [$uploadHandler, "handleUpload"], 10, 2);
+            add_filter("file_is_displayable_image", [$uploadHandler, "handleDisplayableImage"], 10, 2);
+            add_filter("wp_generate_attachment_metadata", [$uploadHandler, "handleMetadataGeneration"], 10, 2);
+        }
     }
 
     /**

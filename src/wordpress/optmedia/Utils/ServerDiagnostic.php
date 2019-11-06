@@ -147,6 +147,10 @@ class ServerDiagnostic
                 "type" => "command",
             ],
             [
+                "name" => "pngquant",
+                "type" => "command",
+            ],
+            [
                 "name" => "jpegoptim",
                 "type" => "command",
             ],
@@ -154,14 +158,15 @@ class ServerDiagnostic
                 "name" => "cwebp",
                 "type" => "command",
             ],
-            [
-                "name" => "ffmpeg",
-                "type" => "command",
-            ],
-            [
-                "name" => "ffprobe",
-                "type" => "command",
-            ],
+            // ! removed while the plugin doesn't support videos
+            // [
+            //     "name" => "ffmpeg",
+            //     "type" => "command",
+            // ],
+            // [
+            //     "name" => "ffprobe",
+            //     "type" => "command",
+            // ],
         ];
 
         return $this->checkRequirements($requirements);
