@@ -12,6 +12,7 @@ const setUp = (props) => {
   const wrapper = shallow(
     <View
       diagnostic={props.diagnostic}
+      finishDisabled={props.finishDisabled}
       handleFinish={props.handleFinish || jest.fn()}
     />,
   )
@@ -43,6 +44,7 @@ describe("components/ServerDiagnostic/view", () => {
       const props = {
         t: jest.fn(),
         diagnostic: { a: 1, b: 2 },
+        finishDisabled: true,
         handleFinish: jest.fn(),
       }
       const error = checkProps(View, props)
@@ -59,13 +61,13 @@ describe("components/ServerDiagnostic/view", () => {
     expect(diagnostic[2].name).toBeDefined()
   })
   it("should render de set up wrapper", () => {
-    const wrapper = setUp({})
+    const wrapper = setUp({ finishDisabled: true })
     const setUpWrapper = wrapper.find(SetUpWrapper)
 
     expect(setUpWrapper.length).toBe(1)
   })
   it("should render the h3 title and the subtitle", () => {
-    const wrapper = setUp({})
+    const wrapper = setUp({ finishDisabled: true })
     const title = wrapper.find(Typography.Title)
     const subtitle = wrapper.find(Typography.Text)
 
@@ -74,7 +76,7 @@ describe("components/ServerDiagnostic/view", () => {
     expect(title.props().level).toBe(3)
   })
   it("should render the block loading when there's no diagnostic", () => {
-    const wrapper = setUp({})
+    const wrapper = setUp({ finishDisabled: true })
     const blockLoading = wrapper.find(BlockLoading)
     const list = wrapper.find(List)
 
@@ -84,6 +86,7 @@ describe("components/ServerDiagnostic/view", () => {
   it("should render the list items with correct classes and icon when there's a diagnostic", () => {
     const wrapper = setUp({
       diagnostic: defaultDiagnostic,
+      finishDisabled: true,
     })
     const blockLoading = wrapper.find(BlockLoading)
     const list = wrapper.find(List)
@@ -120,7 +123,7 @@ describe("components/ServerDiagnostic/view", () => {
     expect(thirdWarning.length).toBe(1)
   })
   it("should render a link to go back to set up page", () => {
-    const wrapper = setUp({})
+    const wrapper = setUp({ finishDisabled: true })
     const link = wrapper.find(Link)
 
     expect(link.length).toBe(1)
@@ -129,6 +132,7 @@ describe("components/ServerDiagnostic/view", () => {
   it("should render a button to finish set up", () => {
     const props = {
       handleFinish: jest.fn(),
+      finishDisabled: true,
     }
     const wrapper = setUp(props)
     const button = findByTestAttr(wrapper, "finish-button")
@@ -138,5 +142,23 @@ describe("components/ServerDiagnostic/view", () => {
     button.props().onClick()
 
     expect(props.handleFinish.mock.calls.length).toBe(1)
+  })
+  it("should disable finish button", () => {
+    const props = {
+      finishDisabled: true,
+    }
+    const wrapper = setUp(props)
+    const button = findByTestAttr(wrapper, "finish-button")
+
+    expect(button.props().disabled).toBeTruthy()
+  })
+  it("should enable finish button", () => {
+    const props = {
+      finishDisabled: false,
+    }
+    const wrapper = setUp(props)
+    const button = findByTestAttr(wrapper, "finish-button")
+
+    expect(button.props().disabled).toBeFalsy()
   })
 })

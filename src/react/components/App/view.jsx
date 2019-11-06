@@ -8,7 +8,7 @@ import SetUp from "../SetUp"
 import ServerDiagnostic from "../ServerDiagnostic"
 
 const View = ({ loading }) => (
-  <div className="app-wrapper" data-test="app-wrapper">
+  <div className="om-app-wrapper" data-test="app-wrapper">
     {
       loading
         ? (

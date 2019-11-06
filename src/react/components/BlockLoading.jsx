@@ -1,8 +1,14 @@
 import React from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBolt } from "@fortawesome/free-solid-svg-icons"
 
 const BlockLoading = () => (
-  // TODO: this
-  <h1>Block Loading</h1>
+  <div className="om-block-loading">
+    <FontAwesomeIcon
+      className="om-block-loading__bolt"
+      icon={faBolt}
+    />
+  </div>
 )
 
 export default BlockLoading

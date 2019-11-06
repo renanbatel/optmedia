@@ -15,6 +15,7 @@ class ServerDiagnostic extends Component {
 
     this.state = {
       diagnostic: null,
+      finishDisabled: true,
     }
   }
 
@@ -22,12 +23,25 @@ class ServerDiagnostic extends Component {
     this.serverDiagnosticRequest()
   }
 
+  verifyDiagnostic = (diagnostic) => {
+    const keys = Object.keys(diagnostic)
+
+    // Return false if all requirements passed
+    return !keys.reduce((carry, key) => {
+      const passed = diagnostic[key].passed
+        || (diagnostic[key].equivalent && diagnostic[diagnostic[key].equivalent].passed)
+
+      return carry && passed
+    }, true)
+  }
+
   serverDiagnosticRequest = async () => {
     try {
-      const response = await wp.serverDiagnostic()
+      const { diagnostic } = await wp.serverDiagnostic()
 
       this.setState({
-        diagnostic: response.diagnostic,
+        diagnostic,
+        finishDisabled: this.verifyDiagnostic(diagnostic),
       })
     } catch (error) {
       // TODO: handle errors
@@ -43,11 +57,12 @@ class ServerDiagnostic extends Component {
   }
 
   render() {
-    const { diagnostic } = this.state
+    const { diagnostic, finishDisabled } = this.state
 
     return (
       <View
         diagnostic={diagnostic}
+        finishDisabled={finishDisabled}
         handleFinish={this.handleFinish}
       />
     )

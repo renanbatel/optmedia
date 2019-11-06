@@ -1,0 +1,19 @@
+// Colors
+$colors: (
+  light: #fff,
+  dark: #313131,
+  primary: #1890ff,
+  success: #52c41a,
+  warning: #faad14,
+  error: #f5222d,
+  yellow: #ffea2e,
+  text: rgba(0, 0, 0, 0.65),
+  textSecondary: rgba(0, 0, 0, 0.45),
+  disabled: rgba(0, 0, 0, 0.25),
+);
+
+// Media query breakpoints
+$md-breakpoint: 783;
+$lg-breakpoint: 961;
+$xl-breakpoint: 1200;
+$ul-breakpoint: 1500;

@@ -53,6 +53,47 @@ describe("components/ServerDiagnostic/component", () => {
       isSetUp: true,
     })
   })
+  it("should disable finish when diagnostic didn't pass", async () => {
+    const diagnosticMock = {
+      success: true,
+      diagnostic: {
+        first: {
+          type: "extension",
+          passed: true,
+        },
+        second: {
+          type: "extension",
+          passed: false,
+        },
+      },
+    }
+    const wrapper = setUp(diagnosticMock, defaultProps)
+
+    await flushPromises()
+
+    expect(wrapper.props().finishDisabled).toBe(true)
+  })
+  it("should enable finish when diagnostic pass", async () => {
+    const diagnosticMock = {
+      success: true,
+      diagnostic: {
+        first: {
+          type: "extension",
+          passed: true,
+        },
+        second: {
+          type: "extension",
+          passed: false,
+          equivalent: "first",
+        },
+      },
+    }
+    const wrapper = setUp(diagnosticMock, defaultProps)
+
+    await flushPromises()
+
+    expect(wrapper.props().finishDisabled).toBe(false)
+  })
   it("should show expected props on view", async () => {
     const wrapper = setUp(
       defaultDiagnosticMock,
@@ -63,5 +104,6 @@ describe("components/ServerDiagnostic/component", () => {
 
     expect(wrapper.props().diagnostic).toEqual(defaultDiagnostic)
     expect(wrapper.props().handleFinish).toEqual(wrapper.instance().handleFinish)
+    expect(wrapper.props().finishDisabled).toBeDefined()
   })
 })

@@ -10,16 +10,16 @@ import SetUpWrapper from "./SetUpWrapper"
 
 const SetUp = ({ t }) => (
   <SetUpWrapper>
-    <div className="set-up">
-      <FontAwesomeIcon icon={faBolt} />
+    <div className="om-set-up">
       <Typography.Title>
+        <FontAwesomeIcon icon={faBolt} />
         { t("title.set_up") }
       </Typography.Title>
-      <Typography.Text strong>
+      <Typography.Text strong className="om-set-up__subtitle">
         { t("subtitle.set_up") }
       </Typography.Text>
     </div>
-    <div className="set-up-wrapper__actions">
+    <div className="om-set-up-wrapper__actions">
       <Link to="/setup/server-diagnostic">
         <Button
           type="primary"

@@ -25,34 +25,39 @@ export const diagnosticToArray = (diagnostic) => {
 }
 
 const renderItem = (t, diagnostic) => (item) => {
-  const itemClass = `diagnostic-list__item_${item.type}`
+  const itemClass = `om-diagnostic-list__item_${item.type}`
   let state
   let stateClass
   let stateIcon
+  let colorIcon
 
   if (item.passed) {
     state = "success"
-    stateClass = "diagnostic-list__item_success"
+    stateClass = "om-diagnostic-list__item_success"
     stateIcon = "check-circle"
+    colorIcon = "#52c41a" // color(success)
   } else if (!item.passed && (item.equivalent && diagnostic[item.equivalent].passed)) {
     state = "warning"
-    stateClass = "diagnostic-list__item_warning"
+    stateClass = "om-diagnostic-list__item_warning"
     stateIcon = "exclamation-circle"
+    colorIcon = "#faad14" // color(warning)
   } else {
     state = "error"
-    stateClass = "diagnostic-list__item_error"
+    stateClass = "om-diagnostic-list__item_error"
     stateIcon = "close-circle"
+    colorIcon = "#f5222d" // color(error)
   }
 
   return (
-    <List.Item className={cn("diagnostic-list__item", itemClass, stateClass)}>
-      <div className="diagnostic-list__item_icon">
+    <List.Item className={cn("om-diagnostic-list__item", itemClass, stateClass)}>
+      <div className="om-diagnostic-list__item__icon">
         <Icon
           theme="twoTone"
           type={stateIcon}
+          twoToneColor={colorIcon}
         />
       </div>
-      <div className="diagnostic-list__item_text">
+      <div className="om-diagnostic-list__item__text">
         <Typography.Text strong>
           { item.name }
         </Typography.Text>
@@ -77,9 +82,14 @@ const renderItem = (t, diagnostic) => (item) => {
   )
 }
 
-const View = ({ t, diagnostic, handleFinish }) => (
+const View = ({
+  t,
+  diagnostic,
+  finishDisabled,
+  handleFinish,
+}) => (
   <SetUpWrapper>
-    <div className="server-diagnostic">
+    <div className="om-server-diagnostic">
       <Typography.Title level={3}>
         { t("title.server_diagnostic") }
       </Typography.Title>
@@ -91,7 +101,7 @@ const View = ({ t, diagnostic, handleFinish }) => (
           ? (
             <List
               bordered
-              className="diagnostic-list"
+              className="om-diagnostic-list"
               dataSource={diagnosticToArray(diagnostic)}
               renderItem={renderItem(t, diagnostic)}
             />
@@ -100,7 +110,7 @@ const View = ({ t, diagnostic, handleFinish }) => (
           )
       }
     </div>
-    <div className="set-up-wrapper__actions">
+    <div className="om-set-up-wrapper__actions">
       <Link to="/setup">
         <Button>
           { t("button.back") }
@@ -109,6 +119,7 @@ const View = ({ t, diagnostic, handleFinish }) => (
       <Button
         type="primary"
         data-test="finish-button"
+        disabled={finishDisabled}
         onClick={handleFinish}
       >
         { t("button.finish") }
@@ -120,6 +131,7 @@ const View = ({ t, diagnostic, handleFinish }) => (
 View.propTypes = {
   t: PropTypes.func.isRequired,
   diagnostic: PropTypes.instanceOf(Object),
+  finishDisabled: PropTypes.bool.isRequired,
   handleFinish: PropTypes.func.isRequired,
 }
 

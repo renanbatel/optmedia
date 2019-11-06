@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 
 const SetUpWrapper = ({ children }) => (
-  <div className="set-up-wrapper" data-test="set-up-wrapper">
+  <div className="om-set-up-wrapper" data-test="set-up-wrapper">
     { children }
   </div>
 )
