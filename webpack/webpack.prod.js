@@ -2,7 +2,7 @@ const path = require("path")
 const webpackMerge = require("webpack-merge")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const FileManagerPlugin = require("filemanager-webpack-plugin")
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
 
 const common = require("./webpack.common")
 
@@ -10,19 +10,10 @@ module.exports = webpackMerge(common, {
   mode: "production",
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
+      new TerserPlugin({
+        cache: true,
         parallel: true,
-        sourceMap: false,
-        uglifyOptions: {
-          compress: {
-            drop_console: true,
-            dead_code: true,
-          },
-          output: {
-            beautify: false,
-            comments: false,
-          },
-        },
+        sourceMap: true,
       }),
     ],
   },
