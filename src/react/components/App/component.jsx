@@ -7,6 +7,7 @@ class App extends Component {
 
   static propTypes = {
     appOptionsRequest: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
   }
 
   componentDidMount() {
@@ -16,8 +17,12 @@ class App extends Component {
   }
 
   render() {
+    const { loading } = this.props
+
     return (
-      <View />
+      <View
+        loading={loading}
+      />
     )
   }
 

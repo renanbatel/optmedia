@@ -24,6 +24,7 @@ class Image
      */
     protected static function getAvailableDriver()
     {
+        $serverDiagnostic = new ServerDiagnostic();
         $candidates = [
             [
                 "name" => "gd",
@@ -34,7 +35,7 @@ class Image
                 "type" => "extension",
             ],
         ];
-        $diagnostic = ServerDiagnostic::checkRequirements($candidates);
+        $diagnostic = $serverDiagnostic->checkRequirements($candidates);
 
         if ($diagnostic["imagick"]["passed"]) {
             return "imagick";

@@ -5,6 +5,11 @@ export const appUpdateLoading = (loading) => ({
   loading,
 })
 
+export const appUpdateError = (error) => ({
+  type: APP.UPDATE_ERROR,
+  error,
+})
+
 export const appOptionsRequest = () => ({
   type: APP.OPTIONS_REQUEST,
 })
@@ -12,4 +17,14 @@ export const appOptionsRequest = () => ({
 export const appOptionsSuccess = (options) => ({
   type: APP.OPTIONS_SUCCESS,
   options,
+})
+
+export const appSetUpUpdateRequest = (payload) => ({
+  type: APP.SET_UP_UPDATE_REQUEST,
+  payload,
+})
+
+export const appSetUpUpdateSuccess = (plugin_isSetUp) => ({
+  type: APP.SET_UP_UPDATE_SUCCESS,
+  plugin_isSetUp,
 })

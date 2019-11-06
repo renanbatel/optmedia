@@ -1,0 +1,77 @@
+// Get color
+@function color($name) {
+  @return map-get($colors, $name);
+}
+
+// Media queries
+@mixin sm {
+  @media (max-width: #{ $md-breakpoint - 0.02 }px) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (min-width: #{ $md-breakpoint }px) and (max-width: #{ $lg-breakpoint - 0.02 }px) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (min-width: #{ $lg-breakpoint }px) and (max-width: #{ $xl-breakpoint - 0.02 }px) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (min-width: #{ $xl-breakpoint }px) and (max-width: #{ $ul-breakpoint - 0.02 }px) {
+    @content;
+  }
+}
+
+@mixin ul {
+  @media (min-width: #{ $ul-breakpoint }px) {
+    @content;
+  }
+}
+
+@mixin md-and-up {
+  @media (min-width: #{ $md-breakpoint }px) {
+    @content;
+  }
+}
+
+@mixin lg-and-up {
+  @media (min-width: #{ $lg-breakpoint }px) {
+    @content;
+  }
+}
+
+@mixin xl-and-up {
+  @media (min-width: #{ $xl-breakpoint }px) {
+    @content;
+  }
+}
+
+@mixin ul-and-up {
+  @media (min-width: #{ $ul-breakpoint }px) {
+    @content;
+  }
+}
+
+@mixin md-and-down {
+  @media (max-width: #{ $lg-breakpoint - 0.02 }px) {
+    @content;
+  }
+}
+
+@mixin lg-and-down {
+  @media (max-width: #{ $xl-breakpoint - 0.02 }px) {
+    @content;
+  }
+}
+
+@mixin xl-and-down {
+  @media (max-width: #{ $ul-breakpoint - 0.02 }px) {
+    @content;
+  }
+}

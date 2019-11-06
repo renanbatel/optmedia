@@ -1,0 +1,93 @@
+// Set Up Wrapper
+.om-set-up-wrapper {
+  padding: 1.4rem;
+  background: color(light);
+
+  @include md-and-up {
+    max-width: 720px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 1.8rem;
+  }
+
+  @include lg-and-up {
+    max-width: 800px;
+    padding: 2.2rem;
+  }
+
+  @include xl-and-up {
+    max-width: 992px;
+    padding: 2.4rem;
+  }
+}
+
+.om-set-up-wrapper__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.2rem;
+
+  > a,
+  > button {
+    margin-left: 0.8rem;
+  }
+
+  @include md-and-up {
+    margin-top: 1.6rem;
+  }
+
+  @include lg-and-up {
+    margin-top: 1.8rem;
+  }
+}
+
+// Set Up
+.om-set-up {
+  > h1 {
+    
+    > svg {
+      display: inline-block;
+      margin-right: .25em;
+      color: color(yellow);
+    }
+  }
+
+  @include sm {
+    > h1 {
+      font-size: 32px;
+    }
+  }
+}
+
+.om-set-up__subtitle {
+  font-size: 1.05em;
+
+  @include lg-and-up {
+    font-size: 1.1em;
+  }
+}
+
+// Server Diagnostic
+.om-diagnostic-list {
+  margin-top: 1.2rem;
+}
+
+.om-diagnostic-list__item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+}
+
+.om-diagnostic-list__item__icon {
+  padding-right: 22px;
+  
+  > i > svg {
+    width: 18px;
+    height: auto;
+  }
+}
+
+.om-diagnostic-list__item__text {
+  > span {
+    display: block;
+  }
+}

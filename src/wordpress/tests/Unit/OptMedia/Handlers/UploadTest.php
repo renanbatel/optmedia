@@ -11,18 +11,18 @@ class UploadTest extends WP_UnitTestCase
     protected $uploadHandler;
     protected $uploadDir;
     protected $testImageFilename;
-    protected $resourcesBasename;
+    protected $resourcesImgBasename;
     protected $testImageSource;
     protected $testImageTarget;
     protected $upload;
 
     public function setUp(): void
     {
-        $this->resourcesBasename = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/resources";
+        $this->resourcesImgBasename = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img";
         $this->uploadHandler = new UploadHandler();
         $this->uploadDir = wp_upload_dir();
         $this->testImageFilename = "bitcoin.png";
-        $this->testImageSource = "{$this->resourcesBasename}/{$this->testImageFilename}";
+        $this->testImageSource = "{$this->resourcesImgBasename}/{$this->testImageFilename}";
         $this->testImageTarget = "{$this->uploadDir["path"]}/{$this->testImageFilename}";
         $this->upload = [
             "file" => $this->testImageTarget,
@@ -40,7 +40,7 @@ class UploadTest extends WP_UnitTestCase
     
     /**
      * @test
-     * @group handler-upload
+     * @group unit-handler-upload
      */
     public function typesAreAllowed(): void
     {
@@ -80,40 +80,11 @@ class UploadTest extends WP_UnitTestCase
 
     /**
      * @test
-     * @group handler-upload
+     * @group unit-handler-upload
      */
     public function sameTypesAreVerified(): void
     {
         $this->assertTrue($this->uploadHandler->isSameFormat("image/jpeg", "jpeg"));
         $this->assertFalse($this->uploadHandler->isSameFormat("image/webp", "png"));
-    }
-
-    /**
-     * @test
-     * @group handler-upload
-     */
-    public function handleUploadReturnsUnchanged(): void
-    {
-        $this->assertEquals(
-            $this->upload,
-            $this->uploadHandler->handleUpload($this->upload, "test")
-        );
-    }
-
-    /**
-     * @test
-     * @group handler-upload
-     */
-    public function canHandleImageUpload():void
-    {
-        $convertedAttachmentsIds = $this->uploadHandler->handleImage($this->upload, "test");
-
-        $this->assertTrue(is_array($convertedAttachmentsIds));
-        
-        // TODO: test image conversions
-        // TODO: test image generated sizes
-        foreach ($convertedAttachmentsIds as $convertedAttachmentId) {
-            $this->assertTrue(wp_attachment_is_image($convertedAttachmentId));
-        }
     }
 }

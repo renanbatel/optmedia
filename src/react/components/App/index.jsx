@@ -5,7 +5,7 @@ import { appOptionsRequest } from "../../actions/app"
 import App from "./component"
 
 const mapStateToProps = (state) => ({
-  options: state.app.options,
+  loading: state.app.loading,
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

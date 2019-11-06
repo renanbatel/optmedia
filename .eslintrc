@@ -32,7 +32,28 @@
         "_options"
       ]
     }],
+    "no-param-reassign": ["error", {
+      "ignorePropertyModificationsFor": [
+        "Component"
+      ]
+    }],
+    "react/jsx-props-no-spreading": ["error", {
+      "exceptions": [
+        "Component"
+      ]
+    }],
+    "camelcase": ["error", {
+      "allow": [
+        "^plugin_",
+        "^settings_",
+        "drop_console",
+        "dead_code"
+      ]
+    }],
+    "comma-dangle": ["error", "always-multiline"],
     "react/static-property-placement": ["error", "static public field"],
-    "import/no-extraneous-dependencies": "off"
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/no-extraneous-dependencies": "off",
+    "react/forbid-foreign-prop-types": "off"
   }
 }

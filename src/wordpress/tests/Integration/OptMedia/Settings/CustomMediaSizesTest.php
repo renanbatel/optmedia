@@ -1,6 +1,6 @@
 <?php
 
-namespace OptMedia\Tests\Unit\OptMedia\Settings;
+namespace OptMedia\Tests\Integration\OptMedia\Settings;
 
 use WP_UnitTestCase;
 
@@ -36,7 +36,7 @@ class CustomMediaSizesTest extends WP_UnitTestCase
 
   /**
      * @test
-     * @group settings
+     * @group int-settings
      */
     public function canUpdate(): void
     {
@@ -47,7 +47,7 @@ class CustomMediaSizesTest extends WP_UnitTestCase
 
   /**
      * @test
-     * @group settings
+     * @group int-settings
      */
     public function canGet(): void
     {
@@ -58,7 +58,7 @@ class CustomMediaSizesTest extends WP_UnitTestCase
 
   /**
      * @test
-     * @group settings
+     * @group int-settings
      */
     public function canSet(): void
     {

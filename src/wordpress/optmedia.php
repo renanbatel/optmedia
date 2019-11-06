@@ -4,7 +4,7 @@
  * Plugin Name:       OptMedia
  * Plugin URI:        https://github.com/renanbatel/optmedia
  * Description:       Speed up your site by converting images and videos for light formats and using them with responsive resizing and lazy load.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Author:            Renan Batel
  * Author URI:        https://github.com/renanbatel
  * License:           MIT
@@ -25,7 +25,7 @@ include __DIR__ . "/autoload.php";
 
 // Constants
 define("OPTMEDIA_NAME", "OptMedia");
-define("OPTMEDIA_VERSION", "0.1.0");
+define("OPTMEDIA_VERSION", "0.1.1");
 define("OPTMEDIA_DOMAIN", "optmedia");
 define("OPTMEDIA_ADMIN_PAGE_SLUG", "optmedia");
 define("OPTMEDIA_OPTIONS_NAME", "optmedia_options");
@@ -34,5 +34,6 @@ define("OPTMEDIA_PLUGIN_FILE", __FILE__);
 
 \OptMedia\Startup::init();
 
+// TODO: use dependency injection
 // TODO: save user log for debugging
 // TODO: send e-mail to admin with server configuration instructions

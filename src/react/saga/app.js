@@ -6,22 +6,45 @@ import {
 } from "redux-saga/effects"
 
 import wp from "../services/wp"
+import { ERROR } from "../constants"
 import { APP } from "../constants/actions"
-import { appOptionsSuccess } from "../actions/app"
+import {
+  appOptionsSuccess,
+  appUpdateLoading,
+  appUpdateError,
+  appSetUpUpdateSuccess,
+} from "../actions/app"
 
 export function* handleAppOptionsRequest() {
   try {
-    const response = yield call([wp, "pluginOptions"])
+    const { options } = yield call([wp, "pluginOptions"])
 
-    yield put(appOptionsSuccess(response.data))
+    yield put(appOptionsSuccess(options))
+    yield put(appUpdateLoading(false))
   } catch (error) {
-    // TODO: handle errors
-    console.error(error)
+    yield put(appUpdateError({
+      code: ERROR.PLUGIN_API_REQUEST,
+      instance: error,
+    }))
+  }
+}
+
+export function* handleSetUpUpdateRequest({ payload }) {
+  try {
+    const { plugin_isSetUp } = yield call([wp.setUpUpdate(), "create"], payload)
+
+    yield put(appSetUpUpdateSuccess(plugin_isSetUp))
+  } catch (error) {
+    yield put(appUpdateError({
+      code: ERROR.PLUGIN_API_REQUEST,
+      instance: error,
+    }))
   }
 }
 
 export default function* watchApp() {
   yield all([
     takeLatest(APP.OPTIONS_REQUEST, handleAppOptionsRequest),
+    takeLatest(APP.SET_UP_UPDATE_REQUEST, handleSetUpUpdateRequest),
   ])
 }

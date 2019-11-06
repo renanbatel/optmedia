@@ -1,8 +1,8 @@
 <?php
 
-namespace OptMedia\Tests\Unit\OptMedia\Providers\Server;
+namespace OptMedia\Tests\Integration\OptMedia\Providers\Server;
 
-use OptMedia\Tests\Unit\OptMedia\Providers\Server\Resources\ImageTestCase;
+use OptMedia\Tests\Resources\ImageTestCase;
 use OptMedia\Providers\Server\ServerImageInfo;
 use OptMedia\Providers\Server\ServerImageOptimizer;
 
@@ -23,7 +23,7 @@ class ServerImageOptimizerTest extends ImageTestCase
 
    /**
      * @test
-     * @group server-image-optimizer
+     * @group int-server-image-optimizer
      */
     public function canOptimizeImage(): void
     {

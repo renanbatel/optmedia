@@ -5,31 +5,46 @@ namespace OptMedia\Tests\Unit\OptMedia\Utils;
 use WP_UnitTestCase;
 
 use OptMedia\Utils\ServerDiagnostic;
+use OptMedia\Helpers;
 
 class ServerDiagnosticTest extends WP_UnitTestCase
 {
-    protected $pluginDiagnostic;
+    protected $helperMiscMock;
+    protected $serverDiagnostic;
 
     public function setUp(): void
     {
-        $this->pluginDiagnostic = ServerDiagnostic::checkPluginRequirements();
+        $this->helperMiscMock = $this->getMockBuilder(Helpers\Misc::class)
+            ->setMethods(["commandExists"])
+            ->getMock();
+        $this->serverDiagnostic = new ServerDiagnostic();
+
+        $this->serverDiagnostic->setHelperMisc($this->helperMiscMock);
     }
     
     /**
      * @test
-     * @group utils
+     * @group unit-utils
      */
     public function checkPluginRequirementsReturnsArray(): void
     {
-        $this->assertInternalType("array", $this->pluginDiagnostic);
+        $this->helperMiscMock->expects($this->any())
+            ->method("commandExists")
+            ->will($this->returnValue(true));
+
+        $this->assertInternalType("array", $this->serverDiagnostic->checkPluginRequirements());
     }
 
     /**
      * @test
-     * @group utils
+     * @group unit-utils
      */
     public function checkPluginRequirementsReturnsNotEmptyArray(): void
     {
-        $this->assertNotEmpty($this->pluginDiagnostic);
+        $this->helperMiscMock->expects($this->any())
+            ->method("commandExists")
+            ->will($this->returnValue(true));
+        
+        $this->assertNotEmpty($this->serverDiagnostic->checkPluginRequirements());
     }
 }

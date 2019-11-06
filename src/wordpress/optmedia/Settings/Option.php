@@ -18,7 +18,7 @@ class Option
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    protected function getOptions()
+    public function getOptions()
     {
         return json_decode(get_option(OPTMEDIA_OPTIONS_NAME), true);
     }
@@ -32,11 +32,11 @@ class Option
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    protected function getOption($key)
+    public function getOption($key)
     {
         $options = $this->getOptions();
 
-        return isset($options[$key])  ? $options[$key] : null;
+        return isset($options[$key]) ? $options[$key] : null;
     }
 
     /**
@@ -49,9 +49,14 @@ class Option
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    protected function updateOption($key, $value)
+    public function updateOption($key, $value)
     {
         $options = $this->getOptions();
+        
+        if ($options[$key] === $value) {
+            return true;
+        }
+
         $options[$key] = $value;
 
         return update_option(OPTMEDIA_OPTIONS_NAME, json_encode($options));

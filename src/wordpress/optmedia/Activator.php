@@ -8,6 +8,9 @@
 
 namespace OptMedia;
 
+use OptMedia\Constants;
+use OptMedia\Settings\Option;
+
 class Activator
 {
     // Store default options in this array
@@ -24,20 +27,20 @@ class Activator
      */
     public static function activate()
     {
-        self::$defaultOptions = [];
-        
         // NOTE
         // usually everything is in snake_case in php, but not with the options
         // the prefix indicates the usage of this setting (eg. plugin_ is for app-wide
         // settings, settings_ only for the admin-settings pages)
         self::$defaultOptions = [
-            "plugin_currentVersion"    => OPTMEDIA_VERSION,
-            "plugin_lastVersion"       => OPTMEDIA_VERSION,
-            "settings_userAccessLevel" => "manage_options",
+            Constants::PLUGIN_CURRENT_VERSION => OPTMEDIA_VERSION,
+            Constants::PLUGIN_LAST_VERSION => OPTMEDIA_VERSION,
+            Constants::PLUGIN_IS_SETUP => false,
+            Constants::SETTINGS_USER_ACCESS_LEVEL => "manage_options",
         ];
 
         // get current options
-        $options = (array) json_decode(get_option(OPTMEDIA_OPTIONS_NAME));
+        $option = new Option();
+        $options = (array) $option->getOptions();
 
         if (!$options) {
             // Set up $defaultOptions, if it does not exist yet

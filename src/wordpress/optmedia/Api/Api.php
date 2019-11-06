@@ -2,69 +2,45 @@
 
 namespace OptMedia\Api;
 
-use WP_REST_Controller;
-use WP_REST_Request;
-use WP_REST_Server;
-use WP_Error;
+use OptMedia\Lib\DirectoryIterator;
 
-class Api extends WP_Rest_Controller
+class Api
 {
-    protected $options;
-    
-    public function __construct()
+    /**
+     * Get the endpoint class from its path
+     *
+     * @param string $path The endpoint class path
+     * @return string The endpoint class
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     */
+    protected function getEndpointClass($path)
     {
-        $this->options = (array) json_decode(get_option(OPTMEDIA_OPTIONS_NAME));
+        $name = str_replace(["/", ".php"], ["\\", ""], $path);
+
+        return "\\OptMedia\\Api\\Endpoints{$name}";
     }
 
+    /**
+     * Load the REST API endpoints
+     *
+     * @return void
+     *
+     * @since 0.1.1
+     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     */
     public function registerRoutes()
     {
-        register_rest_route(
-            OPTMEDIA_API_NAMESPACE,
-            "/options",
-            [
-                [
-                    "methods"             => WP_REST_Server::READABLE,
-                    "callback"            => [
-                        $this,
-                        "getOptions",
-                    ],
-                    "permission_callback" => [
-                        $this,
-                        "getOptionsPermission",
-                    ],
-                ],
-            ]
-        );
-    }
+        $endpointsPath = __DIR__ . "/Endpoints";
+        $endpointFiles = DirectoryIterator::getFiles($endpointsPath, "php");
 
-    public function getOptions(WP_REST_Request $request)
-    {
-        $result = (object) [
-            "data" => [
-                "asset_path"      => plugin_dir_url(OPTMEDIA_PLUGIN_FILE) . "static",
-                "language"        => get_bloginfo("language"),
-                "name"            => OPTMEDIA_NAME,
-                "options"         => $this->options,
-                "translationSlug" => OPTMEDIA_DOMAIN,
-                "version"         => OPTMEDIA_VERSION,
-            ],
-        ];
+        foreach ($endpointFiles as $endpointFile) {
+            $path = str_replace($endpointsPath, "", $endpointFile);
+            $class = $this->getEndpointClass($path);
+            $endpoint = new $class;
 
-        return $result;
-    }
-
-    public function getOptionsPermission()
-    {
-        $permissions = $this->options["settings_userAccessLevel"];
-
-        if (!current_user_can($permissions)) {
-            return new WP_Error(
-                "Rest Forbidden",
-                esc_html__("You do not have permissions to access this endpoint.", OPTMEDIA_DOMAIN),
-                ["status" => 401]
-            );
+            $endpoint->load();
         }
-
-        return true;
     }
 }
