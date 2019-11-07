@@ -11,4 +11,5 @@ class Constants
 
     // Settings Options
     public const SETTINGS_USER_ACCESS_LEVEL = "settings_userAccessLevel";
+    public const SETTINGS_CUSTOM_MEDIA_SIZES = "settings_customMediaSizes";
 }
