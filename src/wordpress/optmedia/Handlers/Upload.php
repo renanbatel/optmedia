@@ -8,7 +8,9 @@
 
 namespace OptMedia\Handlers;
 
+use OptMedia\Constants;
 use OptMedia\Helpers\Conditions;
+use OptMedia\Helpers\Values;
 use OptMedia\Utils\MediaSettings;
 use OptMedia\Providers\Server\ServerImage;
 use OptMedia\Providers\Server\ServerImageInfo;
@@ -38,7 +40,8 @@ class Upload
     
     private $uploadDir;
     private $mediaSettings;
-    private $convertedAttachmentsIds;
+    private $convertedAttachments;
+    private $uploadedAttachment;
     private $uploadWasAllowed;
     private $uploadedMimeType;
     private $uploadedType;
@@ -50,6 +53,8 @@ class Upload
     {
         $this->uploadDir = wp_upload_dir(null, false);
         $this->mediaSettings = new MediaSettings();
+        $this->convertedAttachments = [];
+        $this->uploadedAttachment = [];
     }
 
     /**
@@ -151,10 +156,10 @@ class Upload
             
             if (Conditions::isImageMimeType($upload["type"])) {
                 $this->uploadedType = "image";
-                $this->convertedAttachmentsIds = $this->handleImage($upload);
+                $this->handleImage($upload);
             } else if (Conditions::isVideoMimeType($upload["type"])) {
                 $this->uploadedType = "video";
-                $this->convertedAttachmentsIds = $this->handleVideo($upload);
+                $this->handleVideo($upload);
             }
         }
 
@@ -165,15 +170,13 @@ class Upload
      * Handles the image upload
      *
      * @param array $upload The uploaded file information
-     * @return array Array of the converted images attachment id
+     * @return void
      *
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    public function handleImage($upload): array
+    public function handleImage($upload): void
     {
-        $convertedAttachmentsIds = [];
-
         foreach (self::$imageFormats as $format) {
             // Skip if it's same format as uploaded
             if ($this->isSameFormat($upload["type"], $format)) {
@@ -182,41 +185,44 @@ class Upload
 
             $serverImage = new ServerImage($upload["file"]);
             $convertedFile = $serverImage->manipulator->convert($format);
-            $convertedAttachmentsIds[$format] = $this->createConvertedAttachment(
-                $convertedFile,
-                $format
-            );
+        
+            $this->createFileAttachment($convertedFile, $format);
         }
-
-        return $convertedAttachmentsIds;
     }
 
     /**
-     * Creates the converted file attachment
+     * Creates the file attachment
      *
-     * @param string $convertedFile The converted file path
-     * @param string $format The converted file format
+     * @param string $file The attachment file path
+     * @param string $format The attachment file format
      * @return integer The created attachment id
      *
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    public function createConvertedAttachment($convertedFile, $format): int
+    public function createFileAttachment($file, $format): int
     {
         // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it
         require_once(ABSPATH . "wp-admin/includes/image.php");
 
-        $basename = basename($convertedFile);
+        $basename = basename($file);
         $title = preg_replace("/\.[^.]+$/", "", $basename);
+        $mimeType = "image/{$format}";
         $attachment = [
             "guid" => "{$this->uploadDir["url"]}/{$basename}",
-            "post_mime_type" => "image/{$format}",
+            "post_mime_type" => $mimeType,
             "post_title" => $title,
             "post_content" => "",
             "post_status" => "inherit",
         ];
-        $attachmentId = wp_insert_attachment($attachment, $convertedFile);
-        $attachmentData = wp_generate_attachment_metadata($attachmentId, $convertedFile);
+        $attachmentId = wp_insert_attachment($attachment, $file);
+        
+        // Save converted attachment information
+        if ($this->uploadedMimeType !== $mimeType) {
+            $this->convertedAttachments[$format] = [ "id" => $attachmentId ];
+        }
+
+        $attachmentData = wp_generate_attachment_metadata($attachmentId, $file);
 
         wp_update_attachment_metadata($attachmentId, $attachmentData);
 
@@ -228,7 +234,7 @@ class Upload
      *
      * @param bool $result The result from file_is_displayable_image()
      * @param string $path The file path
-     * @return boolean
+     * @return bool
      *
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
@@ -263,6 +269,7 @@ class Upload
             $actions = explode(" ", "optimize resize");
             $filePath = get_attached_file($attachmentId);
             $mimeType = get_post_mime_type($attachment);
+            $isUploadedFile = $mimeType === $this->uploadedMimeType;
             
             if (Conditions::isImageMimeType($mimeType)) {
                 $optimized = null;
@@ -276,10 +283,18 @@ class Upload
                     $this->mediaSettings->getSizes(),
                     $metadata
                 );
+                $extension = Values::getExtensionFromMimeType($mimeType);
+
+                if ($isUploadedFile) {
+                    $this->uploadedAttachment["id"] = $attachmentId;
+                    $this->uploadedAttachment["sizes"] = [];
+                } else {
+                    $this->convertedAttachments[$extension]["sizes"] = [];
+                }
 
                 foreach ($actions as $action) {
                     if ($action === "optimize") {
-                        // Optimize uploaded image
+                        // Optimize source image
                         $optimized = $serverImage->optimizer->optimize();
                     } else if ($action === "resize") {
                         $sizesMetadata = [];
@@ -307,11 +322,39 @@ class Upload
 
                                     $resizedServerImageOptimizer->optimize();
                                 }
+
+                                // Save size information
+                                $sizeInformation = [
+                                    "file" => $resizedImage,
+                                    "fileSize" => filesize($resizedImage),
+                                    "width" => $resizedImageSizes["w"],
+                                    "height" => $resizedImageSizes["h"],
+                                ];
+
+                                if ($isUploadedFile) {
+                                    $this->uploadedAttachment["sizes"][$size["name"]] = $sizeInformation;
+                                } else {
+                                    $this->convertedAttachments[$extension]["sizes"][$size["name"]] = $sizeInformation;
+                                }
                             }
                         }
 
                         $metadata["sizes"] = $sizesMetadata;
                     }
+                }
+
+                // Save original image information
+                $originalImageInformation = [
+                    "file" => $filePath,
+                    "fileSize" => filesize($filePath),
+                    "width" => $imageSizes["w"],
+                    "height" => $imageSizes["h"],
+                ];
+
+                if ($isUploadedFile) {
+                    $this->uploadedAttachment["sizes"]["original"] = $originalImageInformation;
+                } else {
+                    $this->convertedAttachments[$extension]["sizes"]["original"] = $originalImageInformation;
                 }
                 
                 $imageMeta = wp_read_image_metadata($filePath);
@@ -321,33 +364,47 @@ class Upload
                 }
             }
 
-            // Set attachments relationship
-            if ($mimeType === $this->uploadedMimeType) {
-                $metaKey = "optmedia_other_formats";
-
-                foreach ($this->convertedAttachmentsIds as $format => $convertedAttachmentId) {
-                    $allowedFormats = $this->uploadedType === "image"
-                        ? self::$imageFormats
-                        : self::$videoFormats;
-                    $otherFormats = [];
-
-                    foreach ($allowedFormats as $allowedFormat) {
-                        if ($format === $allowedFormat) {
-                            continue;
-                        }
-
-                        $otherFormats[$allowedFormat] = isset($this->convertedAttachmentsIds[$allowedFormat])
-                            ? $this->convertedAttachmentsIds[$allowedFormat]
-                            : $attachmentId;
-                    }
-
-                    update_post_meta($convertedAttachmentId, $metaKey, $otherFormats);
-                }
-
-                update_post_meta($attachmentId, $metaKey, $this->convertedAttachmentsIds);
+            // If it's the file that was uploaded set attachments relationship
+            if ($isUploadedFile) {
+                $this->setAttachmentsRelationship($attachmentId);
             }
         }
 
         return $metadata;
+    }
+    
+    /**
+     * Set the generated attachments relationship
+     *
+     * @param integer $attachmentId
+     * @return void
+     *
+     * @author Renan Batel <renanbatel@gmail.com>
+     * @since 0.1.1
+     */
+    protected function setAttachmentsRelationship(int $attachmentId): void
+    {
+        $metaKey = Constants::ATTACHMENT_META_FORMATS;
+
+        foreach ($this->convertedAttachments as $format => $convertedAttachment) {
+            $allowedFormats = $this->uploadedType === "image"
+                ? self::$imageFormats
+                : self::$videoFormats;
+            $otherFormats = [];
+
+            foreach ($allowedFormats as $allowedFormat) {
+                if ($format === $allowedFormat) {
+                    continue;
+                }
+
+                $otherFormats[$allowedFormat] = isset($this->convertedAttachments[$allowedFormat])
+                    ? $this->convertedAttachments[$allowedFormat]
+                    : $this->uploadedAttachment;
+            }
+
+            update_post_meta($convertedAttachment["id"], $metaKey, $otherFormats);
+        }
+
+        update_post_meta($attachmentId, $metaKey, $this->convertedAttachments);
     }
 }

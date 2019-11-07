@@ -21,6 +21,6 @@ class Values
      */
     public static function getExtensionFromMimeType($mimeType): string
     {
-        return explode("/", $mimeType)[0];
+        return explode("/", $mimeType)[1];
     }
 }
