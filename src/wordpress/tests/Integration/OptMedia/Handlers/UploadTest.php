@@ -31,20 +31,20 @@ class UploadTest extends WP_UnitTestCase
     protected $testImageTmp;
     protected $upload;
 
-    protected function assertFormats($formats, $sizes)
+    protected function assertFiles($files, $sizes)
     {
-        foreach ($formats as $format) {
-            $this->assertTrue(isset($format["sizes"]));
-            $this->assertTrue(is_array($format["sizes"]));
+        foreach ($files as $file) {
+            $this->assertTrue(isset($file["sizes"]));
+            $this->assertTrue(is_array($file["sizes"]));
 
             foreach ($sizes as $size) {
-                $this->assertTrue(isset($format["sizes"][$size["name"]]));
-                $this->assertTrue(isset($format["sizes"][$size["name"]]["file"]));
-                $this->assertTrue(isset($format["sizes"][$size["name"]]["url"]));
-                $this->assertTrue(isset($format["sizes"][$size["name"]]["fileSize"]));
-                $this->assertTrue(isset($format["sizes"][$size["name"]]["width"]));
-                $this->assertTrue(isset($format["sizes"][$size["name"]]["height"]));
-                $this->assertFileExists($format["sizes"][$size["name"]]["file"]);
+                $this->assertTrue(isset($file["sizes"][$size["name"]]));
+                $this->assertTrue(isset($file["sizes"][$size["name"]]["file"]));
+                $this->assertTrue(isset($file["sizes"][$size["name"]]["url"]));
+                $this->assertTrue(isset($file["sizes"][$size["name"]]["fileSize"]));
+                $this->assertTrue(isset($file["sizes"][$size["name"]]["width"]));
+                $this->assertTrue(isset($file["sizes"][$size["name"]]["height"]));
+                $this->assertFileExists($file["sizes"][$size["name"]]["file"]);
             }
         }
     }
@@ -114,37 +114,40 @@ class UploadTest extends WP_UnitTestCase
         copy($this->testImageSource, $this->testImageTmp);
 
         $sizes = $this->mediaSettings->getSizes();
-        $metaKey = Constants::ATTACHMENT_META_FORMATS;
+        $metaKey = Constants::ATTACHMENT_META_FILES;
         $overrides = [
             "action" => "test",
             "test_form" => false,
         ];
         $file = wp_handle_upload($_FILES["test"], $overrides);
         $attachmentId = $this->uploadHandler->createFileAttachment($file["file"], "png");
-        $formats = get_post_meta($attachmentId, $metaKey, true);
+        $files = get_post_meta($attachmentId, $metaKey, true);
 
-        $this->assertTrue(is_array($formats));
-        $this->assertTrue(isset($formats["jpeg"]));
-        $this->assertTrue(isset($formats["webp"]));
-        $this->assertTrue(isset($formats["jpeg"]["id"]));
-        $this->assertTrue(isset($formats["webp"]["id"]));
+        $this->assertTrue(is_array($files));
+        $this->assertTrue(isset($files["self"]));
+        $this->assertTrue(isset($files["jpeg"]));
+        $this->assertTrue(isset($files["webp"]));
+        $this->assertTrue(isset($files["jpeg"]["id"]));
+        $this->assertTrue(isset($files["webp"]["id"]));
 
-        $jpegFormats = get_post_meta($formats["jpeg"]["id"], $metaKey, true);
-        $webpFormats = get_post_meta($formats["webp"]["id"], $metaKey, true);
+        $jpegFiles = get_post_meta($files["jpeg"]["id"], $metaKey, true);
+        $webpFiles = get_post_meta($files["webp"]["id"], $metaKey, true);
 
-        $this->assertTrue(is_array($jpegFormats));
-        $this->assertTrue(isset($jpegFormats["png"]));
-        $this->assertTrue(isset($jpegFormats["webp"]));
-        $this->assertTrue(is_array($webpFormats));
-        $this->assertTrue(isset($webpFormats["png"]));
-        $this->assertTrue(isset($webpFormats["jpeg"]));
+        $this->assertTrue(is_array($jpegFiles));
+        $this->assertTrue(isset($jpegFiles["self"]));
+        $this->assertTrue(isset($jpegFiles["png"]));
+        $this->assertTrue(isset($jpegFiles["webp"]));
+        $this->assertTrue(is_array($webpFiles));
+        $this->assertTrue(isset($webpFiles["self"]));
+        $this->assertTrue(isset($webpFiles["png"]));
+        $this->assertTrue(isset($webpFiles["jpeg"]));
 
         // To check if the original image information was saved
         $sizes[] = [ "name" => "original" ];
 
-        $this->assertFormats($formats, $sizes);
-        $this->assertFormats($jpegFormats, $sizes);
-        $this->assertFormats($webpFormats, $sizes);
+        $this->assertFiles($files, $sizes);
+        $this->assertFiles($jpegFiles, $sizes);
+        $this->assertFiles($webpFiles, $sizes);
 
         // Sets plugin_isSetUp option to false
         $this->option->updateOption(Constants::PLUGIN_IS_SETUP, false);

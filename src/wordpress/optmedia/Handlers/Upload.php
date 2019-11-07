@@ -74,28 +74,32 @@ class Upload
      */
     protected function setAttachmentsRelationship(int $attachmentId): void
     {
-        $metaKey = Constants::ATTACHMENT_META_FORMATS;
+        $metaKey = Constants::ATTACHMENT_META_FILES;
 
         foreach ($this->convertedAttachments as $format => $convertedAttachment) {
             $allowedFormats = $this->uploadedType === "image"
                 ? self::$imageFormats
                 : self::$videoFormats;
-            $otherFormats = [];
+            $files = [];
 
             foreach ($allowedFormats as $allowedFormat) {
                 if ($format === $allowedFormat) {
+                    $files["self"] = $convertedAttachment;
+
                     continue;
                 }
 
-                $otherFormats[$allowedFormat] = isset($this->convertedAttachments[$allowedFormat])
+                $files[$allowedFormat] = isset($this->convertedAttachments[$allowedFormat])
                     ? $this->convertedAttachments[$allowedFormat]
                     : $this->uploadedAttachment;
             }
 
-            update_post_meta($convertedAttachment["id"], $metaKey, $otherFormats);
+            update_post_meta($convertedAttachment["id"], $metaKey, $files);
         }
 
-        update_post_meta($attachmentId, $metaKey, $this->convertedAttachments);
+        update_post_meta($attachmentId, $metaKey, $this->convertedAttachments + [
+            "self" => $this->uploadedAttachment,
+        ]);
     }
 
     /**
