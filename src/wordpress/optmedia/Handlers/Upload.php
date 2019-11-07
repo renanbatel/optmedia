@@ -14,6 +14,7 @@ use OptMedia\Helpers\Values;
 use OptMedia\Utils\MediaSettings;
 use OptMedia\Providers\Resources\ImageFactory;
 
+// TODO: split logic in different classes
 // TODO: disable all video handling for now
 // TODO: (Plugin Setting) chose only one format to use for medias
 // TODO: don't convert images with alpha to jpg
@@ -60,6 +61,41 @@ class Upload
         $this->imageFactory = $imageFactory;
         $this->convertedAttachments = [];
         $this->uploadedAttachment = [];
+    }
+
+    /**
+     * Set the generated attachments relationship
+     *
+     * @param integer $attachmentId
+     * @return void
+     *
+     * @author Renan Batel <renanbatel@gmail.com>
+     * @since 0.1.1
+     */
+    protected function setAttachmentsRelationship(int $attachmentId): void
+    {
+        $metaKey = Constants::ATTACHMENT_META_FORMATS;
+
+        foreach ($this->convertedAttachments as $format => $convertedAttachment) {
+            $allowedFormats = $this->uploadedType === "image"
+                ? self::$imageFormats
+                : self::$videoFormats;
+            $otherFormats = [];
+
+            foreach ($allowedFormats as $allowedFormat) {
+                if ($format === $allowedFormat) {
+                    continue;
+                }
+
+                $otherFormats[$allowedFormat] = isset($this->convertedAttachments[$allowedFormat])
+                    ? $this->convertedAttachments[$allowedFormat]
+                    : $this->uploadedAttachment;
+            }
+
+            update_post_meta($convertedAttachment["id"], $metaKey, $otherFormats);
+        }
+
+        update_post_meta($attachmentId, $metaKey, $this->convertedAttachments);
     }
 
     /**
@@ -328,13 +364,11 @@ class Upload
                                     $resizedServerImageOptimizer->optimize();
                                 }
 
-                                // Save size information
-                                $sizeInformation = [
-                                    "file" => $resizedImage,
-                                    "fileSize" => filesize($resizedImage),
-                                    "width" => $resizedImageSizes["w"],
-                                    "height" => $resizedImageSizes["h"],
-                                ];
+                                $sizeInformation = Values::buildFileInformation(
+                                    $resizedImage,
+                                    $resizedImageSizes["w"],
+                                    $resizedImageSizes["h"]
+                                );
 
                                 if ($isUploadedFile) {
                                     $this->uploadedAttachment["sizes"][$size["name"]] = $sizeInformation;
@@ -348,13 +382,11 @@ class Upload
                     }
                 }
 
-                // Save original image information
-                $originalImageInformation = [
-                    "file" => $filePath,
-                    "fileSize" => filesize($filePath),
-                    "width" => $imageSizes["w"],
-                    "height" => $imageSizes["h"],
-                ];
+                $originalImageInformation = Values::buildFileInformation(
+                    $filePath,
+                    $imageSizes["w"],
+                    $imageSizes["h"]
+                );
 
                 if ($isUploadedFile) {
                     $this->uploadedAttachment["sizes"]["original"] = $originalImageInformation;
@@ -376,40 +408,5 @@ class Upload
         }
 
         return $metadata;
-    }
-    
-    /**
-     * Set the generated attachments relationship
-     *
-     * @param integer $attachmentId
-     * @return void
-     *
-     * @author Renan Batel <renanbatel@gmail.com>
-     * @since 0.1.1
-     */
-    protected function setAttachmentsRelationship(int $attachmentId): void
-    {
-        $metaKey = Constants::ATTACHMENT_META_FORMATS;
-
-        foreach ($this->convertedAttachments as $format => $convertedAttachment) {
-            $allowedFormats = $this->uploadedType === "image"
-                ? self::$imageFormats
-                : self::$videoFormats;
-            $otherFormats = [];
-
-            foreach ($allowedFormats as $allowedFormat) {
-                if ($format === $allowedFormat) {
-                    continue;
-                }
-
-                $otherFormats[$allowedFormat] = isset($this->convertedAttachments[$allowedFormat])
-                    ? $this->convertedAttachments[$allowedFormat]
-                    : $this->uploadedAttachment;
-            }
-
-            update_post_meta($convertedAttachment["id"], $metaKey, $otherFormats);
-        }
-
-        update_post_meta($attachmentId, $metaKey, $this->convertedAttachments);
     }
 }

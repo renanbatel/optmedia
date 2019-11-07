@@ -40,6 +40,7 @@ class UploadTest extends WP_UnitTestCase
             foreach ($sizes as $size) {
                 $this->assertTrue(isset($format["sizes"][$size["name"]]));
                 $this->assertTrue(isset($format["sizes"][$size["name"]]["file"]));
+                $this->assertTrue(isset($format["sizes"][$size["name"]]["url"]));
                 $this->assertTrue(isset($format["sizes"][$size["name"]]["fileSize"]));
                 $this->assertTrue(isset($format["sizes"][$size["name"]]["width"]));
                 $this->assertTrue(isset($format["sizes"][$size["name"]]["height"]));

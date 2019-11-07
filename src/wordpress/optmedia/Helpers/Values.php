@@ -23,4 +23,30 @@ class Values
     {
         return explode("/", $mimeType)[1];
     }
+
+    /**
+     * Builds the file information block
+     *
+     * @param string $file The path
+     * @param mixed $width
+     * @param mixed $height
+     * @return array The file information block
+     *
+     * @since 0.1.1
+     * @author Renan Batel <renanbatel@gmail.com>
+     */
+    public static function buildFileInformation(string $file, $width, $height): array
+    {
+        $uploadDir = wp_upload_dir(null, false);
+        $url = "{$uploadDir["url"]}/" . basename($file);
+        $fileSize = filesize($file);
+
+        return compact(
+            "file",
+            "url",
+            "fileSize",
+            "width",
+            "height"
+        );
+    }
 }
