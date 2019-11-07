@@ -12,9 +12,7 @@ use OptMedia\Constants;
 use OptMedia\Helpers\Conditions;
 use OptMedia\Helpers\Values;
 use OptMedia\Utils\MediaSettings;
-use OptMedia\Providers\Server\ServerImage;
-use OptMedia\Providers\Server\ServerImageInfo;
-use OptMedia\Providers\Server\ServerImageOptimizer;
+use OptMedia\Providers\Resources\ImageFactory;
 
 // TODO: disable all video handling for now
 // TODO: (Plugin Setting) chose only one format to use for medias
@@ -40,6 +38,7 @@ class Upload
     
     private $uploadDir;
     private $mediaSettings;
+    private $imageFactory;
     private $convertedAttachments;
     private $uploadedAttachment;
     private $uploadWasAllowed;
@@ -48,11 +47,17 @@ class Upload
 
     /**
      * Class constructor
+     *
+     * @param ImageFactory $imageFactory An ImageFactory instance
+     *
+     * @since 0.1.0
+     * @author Renan Batel <renanbatel@gmail.com>
      */
-    public function __construct()
+    public function __construct(ImageFactory $imageFactory)
     {
         $this->uploadDir = wp_upload_dir(null, false);
         $this->mediaSettings = new MediaSettings();
+        $this->imageFactory = $imageFactory;
         $this->convertedAttachments = [];
         $this->uploadedAttachment = [];
     }
@@ -183,7 +188,7 @@ class Upload
                 continue;
             }
 
-            $serverImage = new ServerImage($upload["file"]);
+            $serverImage = $this->imageFactory->getImage($upload["file"]);
             $convertedFile = $serverImage->manipulator->convert($format);
         
             $this->createFileAttachment($convertedFile, $format);
@@ -273,7 +278,7 @@ class Upload
             
             if (Conditions::isImageMimeType($mimeType)) {
                 $optimized = null;
-                $serverImage = new ServerImage($filePath);
+                $serverImage = $this->imageFactory->getImage($filePath);
                 $imageSizes = $serverImage->info->getSizes();
                 $metadata["width"] = $imageSizes["w"];
                 $metadata["height"] = $imageSizes["h"];
@@ -307,7 +312,7 @@ class Upload
                             );
             
                             if ($resizedImage) {
-                                $resizedServerImageInfo = new ServerImageInfo($resizedImage);
+                                $resizedServerImageInfo = $this->imageFactory->getImageInfo($resizedImage);
                                 $resizedImageSizes = $resizedServerImageInfo->getSizes();
                                 $sizesMetadata[$size["name"]] = [
                                     "file" => basename($resizedImage),
@@ -318,7 +323,7 @@ class Upload
 
                                 // Optimize image if source is not already optimized
                                 if (!$optimized) {
-                                    $resizedServerImageOptimizer = new ServerImageOptimizer($resizedImage);
+                                    $resizedServerImageOptimizer = $this->imageFactory->getImageOptimizer($resizedImage);
 
                                     $resizedServerImageOptimizer->optimize();
                                 }

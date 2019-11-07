@@ -4,6 +4,7 @@ namespace OptMedia\Tests\Unit\OptMedia\Handlers;
 
 use WP_UnitTestCase;
 
+use OptMedia\Providers\Resources\ImageFactory;
 use OptMedia\Handlers\Upload as UploadHandler;
 
 class UploadTest extends WP_UnitTestCase
@@ -12,7 +13,11 @@ class UploadTest extends WP_UnitTestCase
 
     public function setUp()
     {
-        $this->uploadHandler = new UploadHandler();
+        $this->uploadHandler = new UploadHandler(
+            $this->getMockBuilder(ImageFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        );
     }
     
     /**

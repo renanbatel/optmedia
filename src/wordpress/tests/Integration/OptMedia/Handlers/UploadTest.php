@@ -10,6 +10,14 @@ use OptMedia\Settings\Option;
 use OptMedia\OptMedia;
 use OptMedia\Handlers\Upload as UploadHandler;
 
+// Image providers
+// TODO: move this to a better place
+use OptMedia\Providers\Resources\ImageFactory;
+use OptMedia\Providers\Server\ServerImage;
+use OptMedia\Providers\Server\ServerImageInfo;
+use OptMedia\Providers\Server\ServerImageManipulator;
+use OptMedia\Providers\Server\ServerImageOptimizer;
+
 class UploadTest extends WP_UnitTestCase
 {
     protected $option;
@@ -46,7 +54,12 @@ class UploadTest extends WP_UnitTestCase
         $this->option = new Option();
         $this->mediaSettings = new MediaSettings();
         $this->resourcesImgBasename = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img";
-        $this->uploadHandler = new UploadHandler();
+        $this->uploadHandler = new UploadHandler(new ImageFactory(
+            ServerImage::class,
+            ServerImageInfo::class,
+            ServerImageManipulator::class,
+            ServerImageOptimizer::class
+        ));
         $this->uploadDir = wp_upload_dir();
         $this->testImageFilename = "landscape.png";
         $this->testImageSource = "{$this->resourcesImgBasename}/{$this->testImageFilename}";
