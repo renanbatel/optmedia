@@ -2,6 +2,7 @@
 
 namespace OptMedia\Tests\Integration\OptMedia\Handlers;
 
+use DOMDocument;
 use WP_UnitTestCase;
 
 use OptMedia\Constants;
@@ -17,24 +18,7 @@ class AttachmentTest extends WP_UnitTestCase
 
     public function setUp()
     {
-        $uploadDir = wp_upload_dir();
-        $resourcesImgBasename = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img";
-
-        $this->upload = new Handlers\Upload(
-            $this->getMockBuilder(ImageFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock()
-        );
         $this->attachment = new Handlers\Attachment();
-        $this->testImageSource = "{$resourcesImgBasename}/landscape.png";
-        $this->testImageTarget = "{$uploadDir["path"]}/landscape.png";
-
-        copy($this->testImageSource, $this->testImageTarget);
-    }
-
-    public function tearDown()
-    {
-        unlink($this->testImageTarget);
     }
 
     /**
@@ -43,7 +27,19 @@ class AttachmentTest extends WP_UnitTestCase
      */
     public function canHandleImageSrcsetCalculation()
     {
-        $attachmentId = $this->upload->createFileAttachment($this->testImageTarget, "png");
+        $uploadDir = wp_upload_dir();
+        $resourcesImgBasename = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img";
+        $upload = new Handlers\Upload(
+            $this->getMockBuilder(ImageFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        );
+        $testImageSource = "{$resourcesImgBasename}/landscape.png";
+        $testImageTarget = "{$uploadDir["path"]}/landscape.png";
+
+        copy($testImageSource, $testImageTarget);
+        
+        $attachmentId = $upload->createFileAttachment($testImageTarget, "png");
         $files = [
             "self" => [
                 "sizes" => [
@@ -122,5 +118,108 @@ class AttachmentTest extends WP_UnitTestCase
             $expected,
             $this->attachment->handleImageSrcsetCalculation($sources, [], "", [], $attachmentId)
         );
+
+        unlink($testImageTarget);
+    }
+
+    /**
+     * @test
+     * @group int-handler-attachment
+     */
+    public function canHandlePostContentFiltering()
+    {
+        $srcContent = "
+            <div>
+                <img 
+                    src=\"img.jpg\"
+                    class=\"img-class\"
+                />
+            </div>
+        ";
+        $srcsetContent = "
+            <div>
+                <img
+                    alt=\"Img\"
+                    srcset=\"img-300.jpg 300w, img-768.jpg 768w\"
+                    sizes=\"300w, 768w\"
+                />
+            </div>
+        ";
+        $bothContent = "
+            <div>
+                <img
+                    alt=\"Img\"
+                    src=\"img.jpg\"
+                    srcset=\"img-300.jpg 300w, img-768.jpg 768w\"
+                    sizes=\"300w, 768w\"
+                    class=\"img-both\"
+                />
+            </div>
+        ";
+        $srcExpected = [
+            "data-src" => "img.jpg",
+            "class" => "img-class om-lazy-load",
+        ];
+        $srcsetExpected = [
+            "alt" => "Img",
+            "data-srcset" => "img-300.jpg 300w, img-768.jpg 768w",
+            "data-sizes" => "300w, 768w",
+            "class" => "om-lazy-load",
+        ];
+        $bothExpected = [
+            "alt" => "Img",
+            "data-src" => "img.jpg",
+            "data-srcset" => "img-300.jpg 300w, img-768.jpg 768w",
+            "data-sizes" => "300w, 768w",
+            "class" => "img-both om-lazy-load",
+        ];
+        
+        $srcFiltered =  $this->attachment->handlePostContent($srcContent);
+        $srcsetFiltered =  $this->attachment->handlePostContent($srcsetContent);
+        $bothFiltered =  $this->attachment->handlePostContent($bothContent);
+
+        $this->assertFalse(strpos($srcFiltered, "<body>"));
+        $this->assertFalse(strpos($srcFiltered, "</body>"));
+        $this->assertFalse(strpos($srcsetFiltered, "<body>"));
+        $this->assertFalse(strpos($srcsetFiltered, "</body>"));
+        $this->assertFalse(strpos($bothFiltered, "<body>"));
+        $this->assertFalse(strpos($bothFiltered, "</body>"));
+
+        libxml_use_internal_errors(true);
+
+        $srcHTML = new DOMDocument();
+        $srcsetHTML = new DOMDocument();
+        $bothHTML = new DOMDocument();
+
+        $srcHTML->loadHTML($srcFiltered);
+        $srcsetHTML->loadHTML($srcsetFiltered);
+        $bothHTML->loadHTML($bothFiltered);
+
+        $srcImage = $srcHTML->getElementsByTagName("img")[0];
+        $srcsetImage = $srcsetHTML->getElementsByTagName("img")[0];
+        $bothImage = $bothHTML->getElementsByTagName("img")[0];
+
+        $this->assertFalse($srcImage->hasAttribute("src"));
+
+        foreach ($srcExpected as $key => $value) {
+            $this->assertEquals($value, $srcImage->getAttribute($key));
+        }
+
+        $this->assertFalse($srcsetImage->hasAttribute("srcset"));
+        $this->assertFalse($srcsetImage->hasAttribute("sizes"));
+
+        foreach ($srcsetExpected as $key => $value) {
+            $this->assertEquals($value, $srcsetImage->getAttribute($key));
+        }
+
+        $this->assertFalse($bothImage->hasAttribute("src"));
+        $this->assertFalse($bothImage->hasAttribute("srcset"));
+        $this->assertFalse($bothImage->hasAttribute("sizes"));
+
+        foreach ($bothExpected as $key => $value) {
+            $this->assertEquals($value, $bothImage->getAttribute($key));
+        }
+
+        libxml_use_internal_errors(false);
     }
 }

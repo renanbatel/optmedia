@@ -47,7 +47,8 @@
         "^plugin_",
         "^settings_",
         "drop_console",
-        "dead_code"
+        "dead_code",
+        "elements_selector"
       ]
     }],
     "comma-dangle": ["error", "always-multiline"],

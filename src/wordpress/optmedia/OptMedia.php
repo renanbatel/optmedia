@@ -120,6 +120,7 @@ class OptMedia
         $attachment = new Handlers\Attachment();
         
         add_filter("wp_calculate_image_srcset", [$attachment, "handleImageSrcsetCalculation"], 10, 5);
+        add_filter("the_content", [$attachment, "handlePostContent"]);
     }
 
     /**
