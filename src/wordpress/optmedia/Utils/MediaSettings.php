@@ -10,34 +10,17 @@ namespace OptMedia\Utils;
 
 class MediaSettings
 {
-    protected $additionalSizes;
-
     /**
-     * Gets the media size data
+     * Get image sizes names
      *
-     * @param string $name The media size name
-     * @return array The media size data
+     * @return array Image sizes names
      *
-     * @since 0.1.0
-     * @author Renan Batel Rodrigues <renanbatel@gmail.com>
+     * @since 0.1.2
+     * @author Renan Batel <renanbatel@gmail.com>
      */
-    protected function getSizeValues($name)
+    public function getImageSizesNames(): array
     {
-        if (isset($this->additionalSizes[$name])) {
-            return [
-                "name"   => $name,
-                "width"  => $this->additionalSizes[$name]["width"],
-                "height" => $this->additionalSizes[$name]["height"],
-                "crop"   => $this->additionalSizes[$name]["crop"],
-            ];
-        }
-
-        return [
-            "name"   => $name,
-            "width"  => get_option("{$name}_size_w"),
-            "height" => get_option("{$name}_size_h"),
-            "crop"   => !!get_option("{$name}_crop"),
-        ];
+        return get_intermediate_image_sizes();
     }
 
     /**
@@ -48,13 +31,52 @@ class MediaSettings
      * @since 0.1.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    public function getSizes()
+    public function getImageSizes(): array
     {
-        $this->additionalSizes = wp_get_additional_image_sizes();
-        
-        $sizeNames = get_intermediate_image_sizes();
-        $sizes = array_map([ $this, "getSizeValues" ], $sizeNames);
+        $additionalSizes = wp_get_additional_image_sizes();
+        $names = $this->getImageSizesNames();
 
-        return $sizes;
+        return array_map(function (string $name) use ($additionalSizes) {
+            if (isset($additionalSizes[$name])) {
+                return [
+                    "name"   => $name,
+                    "width"  => $additionalSizes[$name]["width"],
+                    "height" => $additionalSizes[$name]["height"],
+                    "crop"   => $additionalSizes[$name]["crop"],
+                ];
+            }
+    
+            return [
+                "name"   => $name,
+                "width"  => get_option("{$name}_size_w"),
+                "height" => get_option("{$name}_size_h"),
+                "crop"   => !!get_option("{$name}_crop"),
+            ];
+        }, $names);
+    }
+
+    /**
+     * Get image size
+     *
+     * @param string $descriptor w (width) or h (height)
+     * @param mixed $value The dimension value
+     * @return string The image size name
+     *
+     * @since 0.1.2
+     * @author Renan Batel <renanbatel@gmail.com>
+     */
+    public function getImageSizeNameByDimension(string $descriptor, $value): string
+    {
+        $sizes = $this->getImageSizes();
+
+        foreach ($sizes as $size) {
+            $key = $descriptor === "w" ? "width" : "height";
+
+            if (intval($size[$key]) === intval($value)) {
+                return $size["name"];
+            }
+        }
+
+        return "original";
     }
 }

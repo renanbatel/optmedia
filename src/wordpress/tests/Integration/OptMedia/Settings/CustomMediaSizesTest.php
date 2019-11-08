@@ -65,7 +65,7 @@ class CustomMediaSizesTest extends WP_UnitTestCase
         // Reload settings
         $this->customMediaSizes->load();
         
-        $mediaSizes = $this->mediaSettings->getSizes();
+        $mediaSizes = $this->mediaSettings->getImageSizes();
 
         foreach ($this->customSizes as $key => $customSize) {
             $this->assertContains($customSize, $mediaSizes);

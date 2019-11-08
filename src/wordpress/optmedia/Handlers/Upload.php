@@ -325,7 +325,7 @@ class Upload
                 $metadata["file"] = $this->getRelativeUploadPath($filePath);
                 $sizes = apply_filters(
                     "intermediate_image_sizes_advanced",
-                    $this->mediaSettings->getSizes(),
+                    $this->mediaSettings->getImageSizes(),
                     $metadata
                 );
                 $extension = Values::getExtensionFromMimeType($mimeType);

@@ -97,6 +97,8 @@ class UploadTest extends WP_UnitTestCase
             $this->upload,
             $this->uploadHandler->handleUpload($this->upload, "test")
         );
+
+        unlink($this->testImageTarget);
     }
 
     /**
@@ -113,7 +115,7 @@ class UploadTest extends WP_UnitTestCase
         // Copies the source image to the tmp folder
         copy($this->testImageSource, $this->testImageTmp);
 
-        $sizes = $this->mediaSettings->getSizes();
+        $sizes = $this->mediaSettings->getImageSizes();
         $metaKey = Constants::ATTACHMENT_META_FILES;
         $overrides = [
             "action" => "test",

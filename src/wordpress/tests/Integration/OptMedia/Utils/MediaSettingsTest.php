@@ -9,12 +9,10 @@ use OptMedia\Utils\MediaSettings;
 class MediaSettingsTest extends WP_UnitTestCase
 {
     protected $mediaSettings;
-    protected $sizes;
 
     public function setUp(): void
     {
         $this->mediaSettings = new MediaSettings();
-        $this->sizes = $this->mediaSettings->getSizes();
     }
 
     /**
@@ -23,7 +21,9 @@ class MediaSettingsTest extends WP_UnitTestCase
      */
     public function getSizesReturnsArray(): void
     {
-        $this->assertInternalType("array", $this->sizes);
+        $sizes = $this->mediaSettings->getImageSizes();
+
+        $this->assertInternalType("array", $sizes);
     }
 
     /**
@@ -32,6 +32,7 @@ class MediaSettingsTest extends WP_UnitTestCase
      */
     public function getSizesReturnsDefaultSizes(): void
     {
+        $sizes = $this->mediaSettings->getImageSizes();
         $defaultSizes = [
             ["name" => "thumbnail"],
             ["name" => "medium"],
@@ -39,6 +40,21 @@ class MediaSettingsTest extends WP_UnitTestCase
             ["name" => "large"],
         ];
 
-        $this->assertArraySubset($defaultSizes, $this->sizes);
+        $this->assertArraySubset($defaultSizes, $sizes);
+    }
+
+    /**
+     * @test
+     * @group int-utils
+     */
+    public function canGetSizeNameByDimension()
+    {
+        $mediumLarge = $this->mediaSettings->getImageSizeNameByDimension("w", 768);
+        $large = $this->mediaSettings->getImageSizeNameByDimension("h", "1024");
+        $original = $this->mediaSettings->getImageSizeNameByDimension("w", "101010");
+
+        $this->assertEquals($mediumLarge, "medium_large");
+        $this->assertEquals($large, "large");
+        $this->assertEquals($original, "original");
     }
 }
