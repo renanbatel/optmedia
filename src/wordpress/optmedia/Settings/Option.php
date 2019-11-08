@@ -53,7 +53,7 @@ class Option
     {
         $options = $this->getOptions();
         
-        if ($options[$key] === $value) {
+        if (isset($options[$key]) && $options[$key] === $value) {
             return true;
         }
 

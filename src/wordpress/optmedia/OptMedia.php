@@ -13,9 +13,17 @@ use OptMedia\I18N;
 use OptMedia\Settings\Settings;
 use OptMedia\Admin\Admin;
 use OptMedia\Api\Api;
-use OptMedia\Handlers\Upload as UploadHandler;
+use OptMedia\Handlers;
 use OptMedia\Theme\Theme;
 use OptMedia\Settings\Option;
+
+// Image providers
+// TODO: move this to a better place
+use OptMedia\Providers\Resources\ImageFactory;
+use OptMedia\Providers\Server\ServerImage;
+use OptMedia\Providers\Server\ServerImageInfo;
+use OptMedia\Providers\Server\ServerImageManipulator;
+use OptMedia\Providers\Server\ServerImageOptimizer;
 
 class OptMedia
 {
@@ -98,16 +106,21 @@ class OptMedia
      */
     private function loadHandlers()
     {
-        $option = new Option();
+        $upload = new Handlers\Upload(new ImageFactory(
+            ServerImage::class,
+            ServerImageInfo::class,
+            ServerImageManipulator::class,
+            ServerImageOptimizer::class
+        ));
 
-        // Only load media handlers if plugin is set up
-        if ($option->getOption(Constants::PLUGIN_IS_SETUP)) {
-            $uploadHandler = new UploadHandler();
+        add_filter("wp_handle_upload", [$upload, "handleUpload"], 10, 2);
+        add_filter("file_is_displayable_image", [$upload, "handleDisplayableImage"], 10, 2);
+        add_filter("wp_generate_attachment_metadata", [$upload, "handleMetadataGeneration"], 10, 2);
 
-            add_filter("wp_handle_upload", [$uploadHandler, "handleUpload"], 10, 2);
-            add_filter("file_is_displayable_image", [$uploadHandler, "handleDisplayableImage"], 10, 2);
-            add_filter("wp_generate_attachment_metadata", [$uploadHandler, "handleMetadataGeneration"], 10, 2);
-        }
+        $attachment = new Handlers\Attachment();
+        
+        add_filter("wp_calculate_image_srcset", [$attachment, "handleImageSrcsetCalculation"], 10, 5);
+        add_filter("the_content", [$attachment, "handlePostContent"]);
     }
 
     /**
@@ -141,11 +154,18 @@ class OptMedia
      */
     public function run()
     {
+        $option = new Option();
+
         $this->loadLocalization();
         $this->loadSettings();
         $this->loadAdmin();
         $this->loadApi();
-        $this->loadHandlers();
+
+        // Only load handlers if plugin is set up
+        if ($option->getOption(Constants::PLUGIN_IS_SETUP)) {
+            $this->loadHandlers();
+        }
+
         $this->loadTheme();
     }
 }

@@ -114,6 +114,7 @@
     "redux-saga": "1.1.1",
     "regenerator-runtime": "0.13.3",
     "superagent": "5.1.0",
+    "vanilla-lazyload": "12.3.0",
     "wpapi": "1.2.1"
   }
 }

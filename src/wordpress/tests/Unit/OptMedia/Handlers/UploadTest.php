@@ -4,45 +4,27 @@ namespace OptMedia\Tests\Unit\OptMedia\Handlers;
 
 use WP_UnitTestCase;
 
+use OptMedia\Providers\Resources\ImageFactory;
 use OptMedia\Handlers\Upload as UploadHandler;
 
 class UploadTest extends WP_UnitTestCase
 {
     protected $uploadHandler;
-    protected $uploadDir;
-    protected $testImageFilename;
-    protected $resourcesImgBasename;
-    protected $testImageSource;
-    protected $testImageTarget;
-    protected $upload;
 
-    public function setUp(): void
+    public function setUp()
     {
-        $this->resourcesImgBasename = dirname(OPTMEDIA_PLUGIN_FILE) . "/tests/Resources/Static/img";
-        $this->uploadHandler = new UploadHandler();
-        $this->uploadDir = wp_upload_dir();
-        $this->testImageFilename = "bitcoin.png";
-        $this->testImageSource = "{$this->resourcesImgBasename}/{$this->testImageFilename}";
-        $this->testImageTarget = "{$this->uploadDir["path"]}/{$this->testImageFilename}";
-        $this->upload = [
-            "file" => $this->testImageTarget,
-            "url"  => "{$this->uploadDir["url"]}/{$this->testImageFilename}",
-            "type" => "image/png",
-        ];
-
-        copy($this->testImageSource, $this->testImageTarget);
-    }
-
-    public function tearDown(): void
-    {
-        unlink($this->testImageTarget);
+        $this->uploadHandler = new UploadHandler(
+            $this->getMockBuilder(ImageFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        );
     }
     
     /**
      * @test
      * @group unit-handler-upload
      */
-    public function typesAreAllowed(): void
+    public function typesAreAllowed()
     {
         $allow = [
             "image/jpeg",
@@ -82,7 +64,7 @@ class UploadTest extends WP_UnitTestCase
      * @test
      * @group unit-handler-upload
      */
-    public function sameTypesAreVerified(): void
+    public function sameTypesAreVerified()
     {
         $this->assertTrue($this->uploadHandler->isSameFormat("image/jpeg", "jpeg"));
         $this->assertFalse($this->uploadHandler->isSameFormat("image/webp", "png"));

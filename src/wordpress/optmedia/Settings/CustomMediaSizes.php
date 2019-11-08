@@ -8,12 +8,11 @@
 
 namespace OptMedia\Settings;
 
+use OptMedia\Constants;
 use OptMedia\Settings\Option;
 
 class CustomMediaSizes extends Option
 {
-    const OPTION_NAME = "settings_customMediaSizes";
-
     /**
      * Get the custom media sizes option value
      *
@@ -24,7 +23,7 @@ class CustomMediaSizes extends Option
      */
     public function get()
     {
-        return (array) $this->getOption(self::OPTION_NAME);
+        return (array) $this->getOption(Constants::SETTINGS_CUSTOM_MEDIA_SIZES);
     }
 
     /**
@@ -38,7 +37,7 @@ class CustomMediaSizes extends Option
      */
     public function update($customSizes)
     {
-        return $this->updateOption(self::OPTION_NAME, $customSizes);
+        return $this->updateOption(Constants::SETTINGS_CUSTOM_MEDIA_SIZES, $customSizes);
     }
 
     /**
