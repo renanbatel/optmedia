@@ -311,7 +311,7 @@ class Upload
         if ($this->uploadWasAllowed) {
             $attachment = get_post($attachmentId);
             // TODO: make action order settable by user
-            $actions = explode(" ", "optimize resize");
+            $actions = explode(" ", "resize optimize");
             $filePath = get_attached_file($attachmentId);
             $mimeType = get_post_mime_type($attachment);
             $isUploadedFile = $mimeType === $this->uploadedMimeType;
