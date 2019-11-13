@@ -17,8 +17,9 @@ su -s /bin/bash www-data -c "
     wp rewrite structure '/%postname%/' --hard
     sed -i '11s/.*/# END WordPress\nphp_value upload_max_filesize 128M\n /' .htaccess
     sed -i '13s/.*/php_value post_max_size 128M\n /' .htaccess
-    sed -i '14s/.*/php_value max_execution_time 300\n /' .htaccess
-    sed -i '15s/.*/php_value max_input_time 300\n/' .htaccess
+    sed -i '14s/.*/php_value memory_limit 256M\n /' .htaccess
+    sed -i '15s/.*/php_value max_execution_time 300\n /' .htaccess
+    sed -i '16s/.*/php_value max_input_time 300\n/' .htaccess
     wp config set WP_DEBUG true --raw
     sed -i \"/^define('WP_DEBUG', true)/a @ini_set( 'error_log', '/var/www/html/wp-content/logs/debug.log' );\" wp-config.php 
     sed -i \"/^define('WP_DEBUG', true)/a @ini_set( 'log_errors', 1 );\" wp-config.php 
