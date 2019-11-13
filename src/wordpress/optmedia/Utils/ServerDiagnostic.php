@@ -127,10 +127,6 @@ class ServerDiagnostic
                 "version" => "7.2",
             ],
             [
-                "name" => "fileinfo",
-                "type" => "extension",
-            ],
-            [
                 "name"       => "gd",
                 "type"       => "extension",
                 "version"    => "2.0",
