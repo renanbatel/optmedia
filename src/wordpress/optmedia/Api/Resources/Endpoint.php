@@ -58,7 +58,7 @@ abstract class Endpoint
         if (!current_user_can($permissions)) {
             return new WP_Error(
                 "Rest Forbidden",
-                esc_html__("You do not have permissions to access this endpoint.", OPTMEDIA_DOMAIN),
+                esc_html__("You do not have permissions to access this endpoint.", "optmedia"),
                 ["status" => 401]
             );
         }

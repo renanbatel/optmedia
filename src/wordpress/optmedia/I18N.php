@@ -34,7 +34,7 @@ class I18N
     public function loadPluginTextdomain()
     {
         load_plugin_textdomain(
-            OPTMEDIA_DOMAIN,
+            "optmedia",
             false,
             dirname(dirname(plugin_basename(__FILE__))) . "/languages/"
         );

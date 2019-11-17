@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the OptMedia package.
 msgid ""
 msgstr ""
-"Project-Id-Version: OptMedia 0.1.0\n"
+"Project-Id-Version: OptMedia 0.1.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/optmedia\n"
-"POT-Creation-Date: 2019-10-06 02:43:28+00:00\n"
+"POT-Creation-Date: 2019-11-16 19:36:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,17 +12,17 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: optmedia/Admin/Admin.php:44
+#: optmedia/Admin/Admin.php:49
 msgid "OptMedia Settings"
 msgstr ""
 
-#. #-#-#-#-#  optmedia.pot (OptMedia 0.1.0)  #-#-#-#-#
+#. #-#-#-#-#  optmedia.pot (OptMedia 0.1.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: optmedia/Admin/Admin.php:45
+#: optmedia/Admin/Admin.php:50
 msgid "OptMedia"
 msgstr ""
 
-#: optmedia/Api/Api.php:63
+#: optmedia/Api/Resources/Endpoint.php:61
 msgid "You do not have permissions to access this endpoint."
 msgstr ""
 

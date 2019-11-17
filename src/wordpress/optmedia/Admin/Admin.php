@@ -46,8 +46,8 @@ class Admin
     {
         $this->pluginScreenHookSuffix = add_submenu_page(
             "upload.php",
-            __("OptMedia Settings", OPTMEDIA_DOMAIN),
-            __("OptMedia", OPTMEDIA_DOMAIN),
+            __("OptMedia Settings", "optmedia"),
+            __("OptMedia", "optmedia"),
             $this->options[Constants::SETTINGS_USER_ACCESS_LEVEL],
             OPTMEDIA_ADMIN_PAGE_SLUG,
             [
@@ -127,7 +127,7 @@ class Admin
                     "nonce" => wp_create_nonce("wp_rest"),
                     "root" => esc_url_raw(rest_url()),
                     "name" => OPTMEDIA_NAME,
-                    "translationSlug" => OPTMEDIA_DOMAIN,
+                    "translationSlug" => "optmedia",
                 ]
             );
         }

@@ -26,7 +26,6 @@ include __DIR__ . "/autoload.php";
 // Constants
 define("OPTMEDIA_NAME", "OptMedia");
 define("OPTMEDIA_VERSION", "0.1.1");
-define("OPTMEDIA_DOMAIN", "optmedia");
 define("OPTMEDIA_ADMIN_PAGE_SLUG", "optmedia");
 define("OPTMEDIA_OPTIONS_NAME", "optmedia_options");
 define("OPTMEDIA_API_NAMESPACE", "optmedia/v1");
