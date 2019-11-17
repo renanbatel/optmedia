@@ -60,6 +60,7 @@ const renderItem = (t, diagnostic) => (item) => {
       <div className="om-diagnostic-list__item__text">
         <Typography.Text strong>
           { item.name }
+          { item.required ? ` ${item.required}` : "" }
         </Typography.Text>
         {
           state === "warning"

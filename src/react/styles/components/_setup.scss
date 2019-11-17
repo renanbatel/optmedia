@@ -89,5 +89,9 @@
 .om-diagnostic-list__item__text {
   > span {
     display: block;
+
+    > strong {
+      text-transform: uppercase;
+    }
   }
 }
