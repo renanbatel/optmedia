@@ -12,7 +12,7 @@
     "server_diagnostic": "This plugin needs everything listed bellow, so it can work correctly."
   },
   "caption": {
-    "server_diagnostic_equivalent": "You don't have {{target}} but {{equivalent}} is equivalent."
+    "server_diagnostic_equivalent": "You don't have {{target}} installed, but {{equivalent}} is equivalent."
   },
   "button": {
     "begin": "Begin",

@@ -2,5 +2,21 @@
   "app": {
     "name": "OptMedia",
     "description": "Acelere seu site convertendo imagens e vídeos para formatos mais leves, usando-os com redimensionamento responsivo e carregamento dinâmico."
+  },
+  "title": {
+    "set_up": "Olá! Vamos otimizar o seu site.",
+    "server_diagnostic": "Estamos verificando se o seu servidor possui tudo o que precisamos."
+  },
+  "subtitle": {
+    "set_up": "Com este plugin você será capaz de otimizar as imagens do seu site utilizando compressão com perda de dados, redimensionamento responsivo, carregamento dinâmico e conversão de formatos.",
+    "server_diagnostic": "Este plugin necessita de todos os itens listados abaixo para que ele possa funcionar corretamente."
+  },
+  "caption": {
+    "server_diagnostic_equivalent": "Você não possui o {{target}} instalado, mas o {{equivalent}} é equivalente."
+  },
+  "button": {
+    "begin": "Começar",
+    "back": "Voltar",
+    "finish": "Terminar"
   }
 }
