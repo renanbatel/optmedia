@@ -8,6 +8,7 @@ class Constants
     public const PLUGIN_CURRENT_VERSION = "plugin_currentVersion";
     public const PLUGIN_LAST_VERSION = "plugin_lastVersion";
     public const PLUGIN_IS_SETUP = "plugin_isSetUp";
+    public const PLUGIN_IMAGE_FORMATS = "plugin_imageFormats";
 
     // Settings Options
     public const SETTINGS_USER_ACCESS_LEVEL = "settings_userAccessLevel";

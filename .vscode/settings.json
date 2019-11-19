@@ -2,6 +2,9 @@
   "[javascript]": {
     "editor.tabSize": 2
   },
+  "[javascriptreact]": {
+    "editor.tabSize": 2
+  },
   "[php]": {
     "editor.tabSize": 4
   },

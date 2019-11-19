@@ -10,6 +10,7 @@ namespace OptMedia;
 
 use OptMedia\Constants;
 use OptMedia\Settings\Option;
+use OptMedia\Handlers;
 
 class Activator
 {
@@ -35,6 +36,7 @@ class Activator
             Constants::PLUGIN_CURRENT_VERSION => OPTMEDIA_VERSION,
             Constants::PLUGIN_LAST_VERSION => OPTMEDIA_VERSION,
             Constants::PLUGIN_IS_SETUP => false,
+            Constants::PLUGIN_IMAGE_FORMATS => Handlers\Upload::$defaultImageFormats,
             Constants::SETTINGS_USER_ACCESS_LEVEL => "manage_options",
         ];
 

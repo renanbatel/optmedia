@@ -1,7 +1,7 @@
 {
     "name": "optmedia/optmedia",
     "description": "Speed up your site by converting images and videos for light formats and using them with responsive resizing and lazy load.",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "type": "wordpress-plugin",
     "license": "MIT",
     "authors": [

@@ -60,7 +60,7 @@ describe("components/ServerDiagnostic/view", () => {
     expect(diagnostic[1].name).toBeDefined()
     expect(diagnostic[2].name).toBeDefined()
   })
-  it("should render de set up wrapper", () => {
+  it("should render the set up wrapper", () => {
     const wrapper = setUp({ finishDisabled: true })
     const setUpWrapper = wrapper.find(SetUpWrapper)
 

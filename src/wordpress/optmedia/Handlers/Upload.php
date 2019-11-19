@@ -12,6 +12,7 @@ use OptMedia\Constants;
 use OptMedia\Helpers\Conditions;
 use OptMedia\Helpers\Values;
 use OptMedia\Utils\MediaSettings;
+use OptMedia\Settings\Option;
 use OptMedia\Providers\Resources\ImageFactory;
 
 // TODO: split logic in different classes
@@ -27,7 +28,7 @@ class Upload
         "video/mp4",
         "video/webm",
     ];
-    public static $imageFormats = [
+    public static $defaultImageFormats = [
         "jpeg",
         "png",
         "webp",
@@ -40,6 +41,7 @@ class Upload
     private $uploadDir;
     private $mediaSettings;
     private $imageFactory;
+    private $enabledImageFormats;
     private $convertedAttachments;
     private $uploadedAttachment;
     private $uploadWasAllowed;
@@ -56,9 +58,12 @@ class Upload
      */
     public function __construct(ImageFactory $imageFactory)
     {
+        $option = new Option();
+
         $this->uploadDir = wp_upload_dir(null, false);
         $this->mediaSettings = new MediaSettings();
         $this->imageFactory = $imageFactory;
+        $this->enabledImageFormats = $option->getOption(Constants::PLUGIN_IMAGE_FORMATS);
         $this->convertedAttachments = [];
         $this->uploadedAttachment = [];
     }
@@ -78,7 +83,7 @@ class Upload
 
         foreach ($this->convertedAttachments as $format => $convertedAttachment) {
             $allowedFormats = $this->uploadedType === "image"
-                ? self::$imageFormats
+                ? $this->enabledImageFormats
                 : self::$videoFormats;
             $files = [];
 
@@ -222,7 +227,7 @@ class Upload
      */
     public function handleImage($upload): void
     {
-        foreach (self::$imageFormats as $format) {
+        foreach ($this->enabledImageFormats as $format) {
             // Skip if it's same format as uploaded
             if ($this->isSameFormat($upload["type"], $format)) {
                 continue;

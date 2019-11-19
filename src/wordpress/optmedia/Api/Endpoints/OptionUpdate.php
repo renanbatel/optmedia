@@ -8,17 +8,17 @@ use WP_REST_Response;
 
 use OptMedia\Constants;
 use OptMedia\Api\Resources\Endpoint;
+use OptMedia\Api\Resources\Validator;
 use OptMedia\Settings\Option;
 
-class SetUpUpdate extends Endpoint
+class OptionUpdate extends Endpoint
 {
-
     private $option;
 
     /**
      * Class Constructor
      *
-     * @since 0.1.1
+     * @since 0.2.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
     public function __construct()
@@ -27,17 +27,17 @@ class SetUpUpdate extends Endpoint
     }
 
     /**
-     * Creates the SetUpUpdate Object with given dependencies
+     * Creates the OptionUpdate Object with given dependencies
      *
      * @param Option $option
-     * @return SetUpUpdate
+     * @return OptionUpdate
      *
-     * @since 0.1.1
+     * @since 0.2.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
-    public static function factory(Option $option): SetUpUpdate
+    public static function factory(Option $option): OptionUpdate
     {
-        $setUpUpdate = new SetUpUpdate();
+        $setUpUpdate = new OptionUpdate();
 
         $setUpUpdate->setOption($option);
 
@@ -50,7 +50,7 @@ class SetUpUpdate extends Endpoint
      * @param Option $option The option object
      * @return void
      *
-     * @since 0.1.1
+     * @since 0.2.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
     public function setOption(Option $option): void
@@ -64,12 +64,18 @@ class SetUpUpdate extends Endpoint
      * @param array $body The request body
      * @return boolean
      *
-     * @since 0.1.1
+     * @since 0.2.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
     public function postIsValid($body): bool
     {
-        return isset($body["isSetUp"]);
+        $possibleKeys = [
+            Constants::PLUGIN_IMAGE_FORMATS,
+        ];
+
+        return !Validator::isEmpty($body, "key")
+            && in_array($body["key"], $possibleKeys)
+            && !Validator::isEmpty($body, "value");
     }
 
     /**
@@ -78,7 +84,7 @@ class SetUpUpdate extends Endpoint
      * @param WP_REST_Request $request
      * @return WP_REST_Response The response
      *
-     * @since 0.1.1
+     * @since 0.2.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
     public function post(WP_REST_Request $request): WP_REST_Response
@@ -86,13 +92,15 @@ class SetUpUpdate extends Endpoint
         $body = $request->get_json_params();
 
         if ($this->postIsValid($body)) {
-            $isSetUp = !!$body["isSetUp"];
-            $success = $this->option->updateOption(Constants::PLUGIN_IS_SETUP, $isSetUp);
+            $success = $this->option->updateOption($body["key"], $body["value"]);
 
             if ($success) {
                 return $this->response([
                     "success" => true,
-                    Constants::PLUGIN_IS_SETUP => $isSetUp,
+                    "option" => [
+                        "key" => $body["key"],
+                        "value" => $body["value"],
+                    ],
                 ]);
             } else {
                 return $this->internalError();
@@ -107,13 +115,13 @@ class SetUpUpdate extends Endpoint
      *
      * @return void
      *
-     * @since 0.1.1
+     * @since 0.2.0
      * @author Renan Batel Rodrigues <renanbatel@gmail.com>
      */
     public function load()
     {
         $this->registerRoute(
-            "/setUpUpdate",
+            "/optionUpdate",
             WP_REST_Server::CREATABLE,
             "defaultPermission"
         );

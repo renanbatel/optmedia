@@ -9,5 +9,6 @@ const wp = new WPAPI({
 wp.pluginOptions = wp.registerRoute(__OPTMEDIA__.namespace, "options", { methods: ["GET"] })
 wp.serverDiagnostic = wp.registerRoute(__OPTMEDIA__.namespace, "serverDiagnostic", { methods: ["GET"] })
 wp.setUpUpdate = wp.registerRoute(__OPTMEDIA__.namespace, "setUpUpdate", { methods: ["POST"] })
+wp.optionUpdate = wp.registerRoute(__OPTMEDIA__.namespace, "optionUpdate", { methods: ["POST"] })
 
 export default wp

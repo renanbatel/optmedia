@@ -43,6 +43,17 @@ export default (state = initialState, action) => {
         },
       }
     }
+    case APP.OPTION_UPDATE_SUCCESS: {
+      const { key, value } = action.option
+
+      return {
+        ...state,
+        options: {
+          ...state.options,
+          [key]: value,
+        },
+      }
+    }
     default:
       return state
   }

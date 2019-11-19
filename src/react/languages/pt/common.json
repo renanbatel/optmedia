@@ -18,5 +18,20 @@
     "begin": "Começar",
     "back": "Voltar",
     "finish": "Terminar"
+  },
+  "menu": {
+    "item":{
+      "general": "Geral",
+      "compression": "Compressão",
+      "jpeg": "JPEG",
+      "png": "PNG",
+      "webp": "WEBP"
+    }
+  },
+  "label": {
+    "image_formats": "Formatos de imagem",
+    "jpeg": "JPEG",
+    "png": "PNG",
+    "webp": "WEBP"
   }
 }

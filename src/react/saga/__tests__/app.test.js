@@ -5,6 +5,7 @@ import wp from "../../services/wp"
 import watchApp, {
   handleAppOptionsRequest,
   handleSetUpUpdateRequest,
+  handleOptionUpdateRequest,
 } from "../app"
 import {
   appOptionsSuccess,
@@ -12,6 +13,8 @@ import {
   appUpdateLoading,
   appSetUpUpdateRequest,
   appSetUpUpdateSuccess,
+  appOptionUpdateRequest,
+  appOptionUpdateSuccess,
 } from "../../actions/app"
 
 describe("saga/app", () => {
@@ -24,7 +27,7 @@ describe("saga/app", () => {
   it("should watch app actions", () => {
     const app = watchApp()
     const watcher = app.next().value
-    const payload = 2 // equivalent to the number of sagas on all()
+    const payload = 3 // equivalent to the number of sagas on all()
 
     expect(watcher).toBeDefined()
     expect(watcher.payload.length).toBe(payload)
@@ -76,6 +79,37 @@ describe("saga/app", () => {
     const dispatchedActions = await runSagaFunction(
       handleSetUpUpdateRequest,
       appSetUpUpdateRequest({}),
+    )
+
+    expect(dispatchedActions).toContainEqual(appUpdateError(error))
+  })
+  it("should handle option update request and handle response in case of success", async () => {
+    const option = {
+      key: "foo",
+      value: "bar",
+    }
+
+    wp.optionUpdate.mockImplementation(() => ({
+      create: jest.fn().mockResolvedValue({ option }),
+    }))
+
+    const dispatchedActions = await runSagaFunction(
+      handleOptionUpdateRequest,
+      appOptionUpdateRequest({}),
+    )
+
+    expect(wp.optionUpdate.mock.calls.length).toBe(1)
+    expect(dispatchedActions).toContainEqual(appOptionUpdateSuccess(option))
+  })
+  it("should handle option update request errors", async () => {
+    const error = {
+      code: ERROR.PLUGIN_API_REQUEST,
+      instance: expect.anything(),
+    }
+
+    const dispatchedActions = await runSagaFunction(
+      handleOptionUpdateRequest,
+      appOptionUpdateRequest({}),
     )
 
     expect(dispatchedActions).toContainEqual(appUpdateError(error))
