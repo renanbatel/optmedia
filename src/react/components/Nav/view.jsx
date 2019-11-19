@@ -10,7 +10,7 @@ const View = ({
   handleMenuItemClick,
 }) => (isSetUp
   ? (
-    <div className="om-nav" data-test="om-nav">
+    <div className="om-nav" data-test="nav">
       <Menu
         mode="inline"
         selectedKeys={selectedKeys}

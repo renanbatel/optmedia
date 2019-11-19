@@ -35,13 +35,13 @@ describe("components/Nav/view", () => {
   })
   it("should not render the nav", () => {
     const wrapper = setUp({ isSetUp: false })
-    const nav = findByTestAttr(wrapper, "om-nav")
+    const nav = findByTestAttr(wrapper, "nav")
 
     expect(nav.length).toBe(0)
   })
   it("should render the nav", () => {
     const wrapper = setUp({ isSetUp: true })
-    const nav = findByTestAttr(wrapper, "om-nav")
+    const nav = findByTestAttr(wrapper, "nav")
 
     expect(nav.length).toBe(1)
   })

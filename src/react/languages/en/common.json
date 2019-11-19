@@ -27,5 +27,8 @@
       "png": "PNG",
       "webp": "WEBP"
     }
+  },
+  "label": {
+    "image_formats": "Image formats"
   }
 }

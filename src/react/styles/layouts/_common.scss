@@ -3,6 +3,8 @@ body {
 }
 
 .om-app-wrapper {
+  display: flex;
+  flex-flow: row wrap;
   padding-top: 10px;
   padding-right: 10px;
 
@@ -13,5 +15,29 @@ body {
 
   @include lg-and-up {
     padding-top: 30px;
+  }
+}
+
+.om-page-wrapper {
+  flex: 0 0 100%;
+  padding: 10px;
+  background: color(light);
+
+  @include md-and-up {
+    flex: 0 0 70%;
+    padding: 20px;
+  }
+
+  @include lg-and-up {
+    padding: 30px 20px 20px 20px;
+  }
+
+  @include xl-and-up {
+    flex: 0 0 75%;
+  }
+
+  @include ul-and-up {
+    flex: 0 0 80%;
+    padding: 30px;
   }
 }
