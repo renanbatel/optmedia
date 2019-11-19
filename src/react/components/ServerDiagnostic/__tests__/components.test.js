@@ -102,8 +102,10 @@ describe("components/ServerDiagnostic/component", () => {
 
     await flushPromises()
 
+    expect(wrapper.props().diagnostic).toBeDefined()
+    expect(wrapper.props().handleFinish).toBeDefined()
+    expect(wrapper.props().finishDisabled).toBeDefined()
     expect(wrapper.props().diagnostic).toEqual(defaultDiagnostic)
     expect(wrapper.props().handleFinish).toEqual(wrapper.instance().handleFinish)
-    expect(wrapper.props().finishDisabled).toBeDefined()
   })
 })

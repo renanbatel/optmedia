@@ -18,5 +18,14 @@
     "begin": "Begin",
     "back": "Back",
     "finish": "Finish"
+  },
+  "menu": {
+    "item":{
+      "general": "General",
+      "compression": "Compression",
+      "jpeg": "JPEG",
+      "png": "PNG",
+      "webp": "WEBP"
+    }
   }
 }
