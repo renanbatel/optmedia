@@ -4,6 +4,7 @@ import {
   appUpdateError,
   appOptionsSuccess,
   appSetUpUpdateSuccess,
+  appOptionUpdateSuccess,
 } from "../../actions/app"
 
 describe("reducers/app", () => {
@@ -38,5 +39,14 @@ describe("reducers/app", () => {
     const state = app(undefined, appSetUpUpdateSuccess(plugin_isSetUp))
 
     expect(state.options.plugin_isSetUp).toBe(plugin_isSetUp)
+  })
+  it("should update the options state", () => {
+    const option = {
+      key: "foo",
+      value: "bar",
+    }
+    const state = app(undefined, appOptionUpdateSuccess(option))
+
+    expect(state.options[option.key]).toBe(option.value)
   })
 })

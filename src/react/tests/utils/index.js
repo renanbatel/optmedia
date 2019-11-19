@@ -4,6 +4,7 @@ const wpMock = [
   "pluginOptions",
   "serverDiagnostic",
   "setUpUpdate",
+  "optionUpdate",
 ]
 
 export const mockWp = () => {

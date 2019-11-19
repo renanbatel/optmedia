@@ -49,6 +49,7 @@ describe("components/Nav/view", () => {
     const props = {
       isSetUp: true,
       selectedKeys: ["/"],
+      handleMenuItemClick: jest.fn(),
     }
     const wrapper = setUp(props)
     const menu = wrapper.find(Menu)
@@ -56,6 +57,8 @@ describe("components/Nav/view", () => {
     expect(menu.length).toBe(1)
     expect(menu.props().mode).toEqual("inline")
     expect(menu.props().selectedKeys).toEqual(props.selectedKeys)
+    expect(menu.props().onClick).toEqual(props.handleMenuItemClick)
+
 
     // Menu items
     const items = menu.find(Menu.Item)

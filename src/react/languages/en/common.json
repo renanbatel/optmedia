@@ -29,6 +29,9 @@
     }
   },
   "label": {
-    "image_formats": "Image formats"
+    "image_formats": "Image formats",
+    "jpeg": "JPEG",
+    "png": "PNG",
+    "webp": "WEBP"
   }
 }

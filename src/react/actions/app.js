@@ -28,3 +28,13 @@ export const appSetUpUpdateSuccess = (plugin_isSetUp) => ({
   type: APP.SET_UP_UPDATE_SUCCESS,
   plugin_isSetUp,
 })
+
+export const appOptionUpdateRequest = (payload) => ({
+  type: APP.OPTION_UPDATE_REQUEST,
+  payload,
+})
+
+export const appOptionUpdateSuccess = (option) => ({
+  type: APP.OPTION_UPDATE_SUCCESS,
+  option,
+})

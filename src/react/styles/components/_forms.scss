@@ -1,0 +1,22 @@
+.om-options-form__label {
+  font-size: 1em;
+  margin-bottom: .9rem;
+  font-weight: bold;
+
+  @include lg-and-up {
+    margin-bottom: 1rem;
+    font-size: 1.1em;
+  }
+}
+
+.om-options-form__inner {
+  padding-left: 10px;
+
+  @include md-and-up {
+    padding-left: 15px;
+  }
+
+  @include ul-and-up {
+    padding-left: 20px;
+  }
+}

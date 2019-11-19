@@ -13,6 +13,7 @@ import {
   appUpdateLoading,
   appUpdateError,
   appSetUpUpdateSuccess,
+  appOptionUpdateSuccess,
 } from "../actions/app"
 
 export function* handleAppOptionsRequest() {
@@ -42,9 +43,23 @@ export function* handleSetUpUpdateRequest({ payload }) {
   }
 }
 
+export function* handleOptionUpdateRequest({ payload }) {
+  try {
+    const { option } = yield call([wp.optionUpdate(), "create"], payload)
+
+    yield put(appOptionUpdateSuccess(option))
+  } catch (error) {
+    yield put(appUpdateError({
+      code: ERROR.PLUGIN_API_REQUEST,
+      instance: error,
+    }))
+  }
+}
+
 export default function* watchApp() {
   yield all([
     takeLatest(APP.OPTIONS_REQUEST, handleAppOptionsRequest),
     takeLatest(APP.SET_UP_UPDATE_REQUEST, handleSetUpUpdateRequest),
+    takeLatest(APP.OPTION_UPDATE_REQUEST, handleOptionUpdateRequest),
   ])
 }

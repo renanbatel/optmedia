@@ -5,6 +5,8 @@ import {
   appOptionsSuccess,
   appSetUpUpdateRequest,
   appSetUpUpdateSuccess,
+  appOptionUpdateRequest,
+  appOptionUpdateSuccess,
 } from "../app"
 import { APP } from "../../constants/actions"
 
@@ -64,5 +66,29 @@ describe("actions/app", () => {
     }
 
     expect(appSetUpUpdateSuccess(plugin_isSetUp)).toEqual(action)
+  })
+  it("should return the option update request action", () => {
+    const payload = {
+      key: "foo",
+      value: "bar",
+    }
+    const action = {
+      type: APP.OPTION_UPDATE_REQUEST,
+      payload,
+    }
+
+    expect(appOptionUpdateRequest(payload)).toEqual(action)
+  })
+  it("should return the option update success action", () => {
+    const option = {
+      key: "foo",
+      value: "bar",
+    }
+    const action = {
+      type: APP.OPTION_UPDATE_SUCCESS,
+      option,
+    }
+
+    expect(appOptionUpdateSuccess(option)).toEqual(action)
   })
 })
