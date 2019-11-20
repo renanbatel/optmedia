@@ -117,10 +117,13 @@ class OptMedia
         add_filter("file_is_displayable_image", [$upload, "handleDisplayableImage"], 10, 2);
         add_filter("wp_generate_attachment_metadata", [$upload, "handleMetadataGeneration"], 10, 2);
 
-        $attachment = new Handlers\Attachment();
-        
-        add_filter("wp_calculate_image_srcset", [$attachment, "handleImageSrcsetCalculation"], 10, 5);
-        add_filter("the_content", [$attachment, "handlePostContent"]);
+        // Only run on theme pages
+        if (!is_admin()) {
+            $attachment = new Handlers\Attachment();
+            
+            add_filter("wp_calculate_image_srcset", [$attachment, "handleImageSrcsetCalculation"], 10, 5);
+            add_filter("the_content", [$attachment, "handlePostContent"]);
+        }
     }
 
     /**
